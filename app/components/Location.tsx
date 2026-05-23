@@ -25,8 +25,8 @@ const details = [
   {
     icon: Clock,
     label: "Hours",
-    value: "Mon – Fri: 8:00am – 6:00pm",
-    sub: "Contact us for weekend availability",
+    value: "Tues, Wed, Fri: 8:00am – 6:00pm",
+    sub: "Mon, Thurs, Sat & Sun: by appointment",
   },
 ];
 

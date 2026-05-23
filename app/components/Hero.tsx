@@ -5,12 +5,6 @@ import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { CLINIKO_URL } from "../lib/booking";
 
-const stats = [
-  { value: "10+", label: "Years specialist experience" },
-  { value: "5", label: "Clinical specialisms" },
-  { value: "CBD", label: "Central Wellington" },
-];
-
 export default function Hero() {
   return (
     <section className="relative overflow-hidden" style={{ minHeight: "100svh" }}>
@@ -52,7 +46,7 @@ export default function Hero() {
       {/* ── Layer 3: Foreground content ──────────────────────────────────── */}
       <div
         className="relative z-10 flex flex-col justify-center"
-        style={{ minHeight: "100svh", paddingTop: "72px" }}
+        style={{ minHeight: "100svh", paddingTop: "108px" }}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full py-20 lg:py-28">
           <div className="max-w-[540px]">
@@ -130,44 +124,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-
-      {/* ── Mobile image strip ────────────────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.35, duration: 0.7, ease: "easeOut" }}
-        className="lg:hidden relative mx-5 mb-10 rounded-3xl overflow-hidden shadow-2xl shadow-forest/15"
-        style={{ aspectRatio: "4/3" }}
-      >
-        <Image
-          src="/images/hero-physio.jpg"
-          alt="Specialist physiotherapy treatment at Reframe Physio, Wellington"
-          fill
-          className="object-cover object-center"
-          sizes="(max-width: 1024px) 95vw"
-          quality={85}
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(to top, rgba(27,58,44,0.38) 0%, transparent 50%)",
-          }}
-        />
-        <div className="absolute bottom-0 inset-x-0 px-5 py-4 flex items-end gap-5">
-          {stats.slice(0, 2).map((s) => (
-            <div key={s.label} className="flex items-baseline gap-1.5">
-              <span className="font-serif text-[1.3rem] text-cream leading-none">
-                {s.value}
-              </span>
-              <span className="text-[10px] text-cream/65 font-medium">
-                {s.label}
-              </span>
-            </div>
-          ))}
-        </div>
-      </motion.div>
 
     </section>
   );

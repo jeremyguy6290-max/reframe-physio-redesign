@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
 
 const faqs = [
@@ -67,9 +67,11 @@ export default function FAQ() {
                 }`}
               >
                 <button
+                  id={`faq-btn-${i}`}
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                   className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
                   aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${i}`}
                 >
                   <span
                     className={`font-sans font-medium text-[15px] leading-snug transition-colors duration-200 ${
@@ -84,6 +86,7 @@ export default function FAQ() {
                         ? "bg-grove border-grove text-cream"
                         : "bg-foam border-linen text-fern"
                     }`}
+                    aria-hidden="true"
                   >
                     {isOpen ? (
                       <Minus size={13} strokeWidth={2.5} />
@@ -93,22 +96,18 @@ export default function FAQ() {
                   </span>
                 </button>
 
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      key="content"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="overflow-hidden"
-                    >
-                      <p className="px-6 pb-5 text-sm text-charcoal leading-relaxed">
-                        {faq.a}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div
+                  id={`faq-answer-${i}`}
+                  role="region"
+                  aria-labelledby={`faq-btn-${i}`}
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    isOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
+                  }`}
+                >
+                  <p className="px-6 pb-5 text-sm text-charcoal leading-relaxed">
+                    {faq.a}
+                  </p>
+                </div>
               </div>
             );
           })}

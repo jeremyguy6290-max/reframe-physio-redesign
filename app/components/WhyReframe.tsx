@@ -101,7 +101,6 @@ export default function WhyReframe() {
                     {pillar.description}
                   </p>
                 </div>
-                <div className="h-px bg-fern/20 mt-auto" />
               </motion.div>
             );
           })}

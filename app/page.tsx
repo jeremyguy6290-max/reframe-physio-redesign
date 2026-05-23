@@ -1,5 +1,6 @@
 import Header from "./components/Header";
 import Hero from "./components/Hero";
+import Announcement from "./components/Announcement";
 import Services from "./components/Services";
 import WhyReframe from "./components/WhyReframe";
 import About from "./components/About";
@@ -13,6 +14,7 @@ export default function Home() {
   return (
     <>
       <Header />
+      <Announcement />
       <main>
         <Hero />
         <Services />

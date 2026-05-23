@@ -113,10 +113,10 @@ export default function Footer() {
                 Hours
               </p>
               <p className="text-[13.5px] text-mint/65">
-                Mon – Fri: 8:00am – 6:00pm
+                Tues, Wed, Fri: 8:00am – 6:00pm
               </p>
               <p className="text-xs text-mint/40 mt-0.5">
-                Contact us for weekend availability
+                Mon, Thurs, Sat &amp; Sun: by appointment
               </p>
             </div>
           </div>
