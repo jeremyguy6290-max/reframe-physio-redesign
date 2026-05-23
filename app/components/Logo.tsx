@@ -3,13 +3,14 @@ interface LogoProps {
   className?: string;
 }
 
-function CloudMark() {
+function CloudMark({ variant }: { variant: "dark" | "light" }) {
   return (
     <img
       src="/images/reframe-cloud-reference.png"
       alt=""
       aria-hidden="true"
       className="h-9 w-auto object-contain"
+      style={variant === "light" ? { filter: "brightness(0) invert(1)" } : undefined}
     />
   );
 }
@@ -21,7 +22,7 @@ export default function Logo({ variant = "dark", className = "" }: LogoProps) {
 
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
-      <CloudMark />
+      <CloudMark variant={variant} />
       <span
         className={`font-sans text-[17px] tracking-tight leading-none select-none ${nameColor}`}
       >

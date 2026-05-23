@@ -7,10 +7,10 @@ import { CLINIKO_URL } from "../lib/booking";
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden" style={{ minHeight: "100svh" }}>
+    <section className="relative overflow-hidden bg-cream" style={{ minHeight: "100svh" }}>
 
-      {/* ── Layer 1: Full-bleed background image ─────────────────────────── */}
-      <div className="absolute inset-0">
+      {/* ── Layer 1: Full-bleed background image (desktop only) ──────────── */}
+      <div className="absolute inset-0 hidden lg:block">
         <Image
           src="/images/hero-physio.jpg"
           alt="Specialist physiotherapy treatment at Reframe Physio, Wellington"
@@ -23,20 +23,20 @@ export default function Hero() {
         />
       </div>
 
-      {/* ── Layer 2: Left-to-right cream gradient overlay ────────────────── */}
+      {/* ── Layer 2: Left-to-right cream gradient overlay (desktop only) ─── */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none hidden lg:block"
         style={{
           background:
             "linear-gradient(to right, rgba(250,247,240,0.97) 0%, rgba(250,247,240,0.90) 20%, rgba(250,247,240,0.68) 38%, rgba(250,247,240,0.12) 55%, transparent 72%)",
         }}
       />
 
-      {/* Bottom atmospheric overlay */}
+      {/* Bottom atmospheric overlay (desktop only) */}
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 h-48 pointer-events-none"
+        className="absolute inset-x-0 bottom-0 h-48 pointer-events-none hidden lg:block"
         style={{
           background:
             "linear-gradient(to top, rgba(27,58,44,0.22) 0%, transparent 100%)",
@@ -93,7 +93,7 @@ export default function Hero() {
                 </a>
                 <a
                   href="/#services"
-                  className="inline-flex items-center gap-2 text-grove font-medium text-[13.5px] px-6 py-3.5 rounded-full border border-grove/30 bg-cream/70 hover:bg-foam hover:border-grove/50 transition-colors duration-200 backdrop-blur-sm"
+                  className="inline-flex items-center gap-2 text-grove font-medium text-[13.5px] px-6 py-3.5 rounded-full border border-grove/30 bg-cream hover:bg-foam hover:border-grove/50 transition-colors duration-200"
                 >
                   View services
                 </a>
@@ -113,7 +113,7 @@ export default function Hero() {
                 ].map((item) => (
                   <span
                     key={item}
-                    className="inline-flex items-center gap-1.5 bg-cream/80 border border-fern/25 text-charcoal text-[12px] font-medium px-3 py-1.5 rounded-full backdrop-blur-sm"
+                    className="inline-flex items-center gap-1.5 bg-cream border border-fern/30 text-charcoal text-[12px] font-medium px-3 py-1.5 rounded-full"
                   >
                     <CheckCircle2 size={11} className="text-fern flex-shrink-0" />
                     {item}
