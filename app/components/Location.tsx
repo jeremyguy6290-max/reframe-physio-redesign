@@ -2,8 +2,16 @@
 
 import { motion } from "framer-motion";
 import { MapPin, Car, Clock, Landmark } from "lucide-react";
+import { HOURS_PRIMARY, HOURS_SECONDARY } from "../lib/hours";
+import ParkingVideoModal from "./ParkingVideoModal";
 
-const details = [
+const details: {
+  icon: React.ElementType;
+  label: string;
+  value: string;
+  sub: string;
+  extra?: React.ReactNode;
+}[] = [
   {
     icon: MapPin,
     label: "Address",
@@ -21,12 +29,17 @@ const details = [
     label: "Parking",
     value: "On-site parking available",
     sub: "Street parking also nearby",
+    extra: (
+      <ParkingVideoModal
+        buttonClassName="mt-1 inline-flex items-center gap-1.5 text-[11px] font-medium text-grove hover:text-forest transition-colors"
+      />
+    ),
   },
   {
     icon: Clock,
     label: "Hours",
-    value: "Tues, Wed, Fri: 8:00am – 6:00pm",
-    sub: "Mon, Thurs, Sat & Sun: by appointment",
+    value: HOURS_PRIMARY,
+    sub: HOURS_SECONDARY,
   },
 ];
 
@@ -60,7 +73,7 @@ export default function Location() {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
-              {details.map(({ icon: Icon, label, value, sub }) => (
+              {details.map(({ icon: Icon, label, value, sub, extra }) => (
                 <div
                   key={label}
                   className="bg-parchment rounded-2xl p-5 border border-linen flex flex-col gap-2"
@@ -75,6 +88,7 @@ export default function Location() {
                     {value}
                   </p>
                   <p className="text-xs text-charcoal">{sub}</p>
+                  {extra}
                 </div>
               ))}
             </div>

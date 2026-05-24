@@ -9,37 +9,40 @@ export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-cream" style={{ minHeight: "100svh" }}>
 
-      {/* ── Layer 1: Full-bleed background image (desktop only) ──────────── */}
+      {/* ── Layer 1: Background image (desktop only) ──────────────────────── */}
       <div className="absolute inset-0 hidden lg:block">
         <Image
-          src="/images/hero-physio.jpg"
+          src="/images/hero-physio-new.jpg"
           alt="Specialist physiotherapy treatment at Reframe Physio, Wellington"
           fill
           className="object-cover"
-          style={{ objectPosition: "65% center" }}
+          style={{ objectPosition: "75% center" }}
           priority
-          quality={100}
+          quality={90}
           sizes="100vw"
         />
       </div>
 
-      {/* ── Layer 2: Left-to-right cream gradient overlay (desktop only) ─── */}
+      {/* ── Layer 2: Left-to-right parchment fade (desktop only) ────────────
+           Parchment = #F0EBE0 = rgba(240,235,224) — matches Services below  */}
       <div
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none hidden lg:block"
         style={{
           background:
-            "linear-gradient(to right, rgba(250,247,240,0.97) 0%, rgba(250,247,240,0.90) 20%, rgba(250,247,240,0.68) 38%, rgba(250,247,240,0.12) 55%, transparent 72%)",
+            "linear-gradient(to right, rgba(240,235,224,0.94) 0%, rgba(240,235,224,0.84) 28%, rgba(240,235,224,0.50) 50%, rgba(240,235,224,0.14) 72%, rgba(240,235,224,0.00) 100%)",
         }}
       />
 
-      {/* Bottom atmospheric overlay (desktop only) */}
+      {/* ── Layer 3: Bottom parchment fade into Services section ────────────
+           Fades to parchment (#F0EBE0) so the hero dissolves into the
+           What We Treat section with no visible seam or colour mismatch.     */}
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 h-48 pointer-events-none hidden lg:block"
+        className="absolute inset-0 pointer-events-none hidden lg:block"
         style={{
           background:
-            "linear-gradient(to top, rgba(27,58,44,0.22) 0%, transparent 100%)",
+            "linear-gradient(to bottom, rgba(240,235,224,0.00) 50%, rgba(240,235,224,0.35) 74%, rgba(240,235,224,0.75) 91%, rgba(240,235,224,1.00) 100%)",
         }}
       />
 
@@ -57,12 +60,9 @@ export default function Hero() {
               className="flex flex-col"
             >
               {/* Eyebrow */}
-              <div className="flex items-center gap-3 mb-8">
-                <div className="h-px w-8 bg-fern/70 flex-shrink-0" />
-                <span className="text-[11.5px] font-semibold tracking-[0.16em] uppercase text-fern">
-                  Wellington&rsquo;s specialist physio clinic
-                </span>
-              </div>
+              <span className="text-[11.5px] font-semibold tracking-[0.16em] uppercase text-fern mb-8">
+                Wellington&rsquo;s specialist physio clinic
+              </span>
 
               {/* Headline */}
               <h1 className="font-serif text-[2.5rem] sm:text-[3rem] lg:text-[3.1rem] xl:text-[3.4rem] text-forest leading-[1.12] tracking-[-0.025em] mb-7">

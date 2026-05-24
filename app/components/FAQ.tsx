@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Plus, Minus, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import { CLINIKO_URL } from "../lib/booking";
+import ParkingVideoModal from "./ParkingVideoModal";
 
 interface FaqItem {
   q: string;
@@ -22,23 +23,30 @@ const categories: Category[] = [
     faqs: [
       {
         q: "What types of conditions does Reframe Physio treat?",
-        a: "We specialise in conditions that benefit from specialist physiotherapy input, including chronic and complex pain, vestibular disorders (dizziness, vertigo, and balance problems), concussion and post-concussion syndrome, Functional Neurological Disorder (FND), and musculoskeletal conditions requiring manual therapy. If you're unsure whether we can help, please get in touch.",
+        a: (
+          <>
+            At Reframe Physio, we specialize in a wide range of conditions to help you restore function and alleviate pain. Our experienced physiotherapist, John, who has over a decade of expertise, focuses on musculoskeletal issues, providing effective manual therapy for joint, muscle, and skeletal pain. We also offer comprehensive vestibular physiotherapy for balance disorders and vertigo, along with specialized concussion rehabilitation to aid in your recovery process.
+            <br /><br />
+            Whether you&apos;re dealing with chronic pain, a sports injury, or a recent concussion, Reframe Physio is also the one of the few clinics in NZ offering private input for FND rehab.
+          </>
+        ),
       },
       {
-        q: "Do you accept Southern Cross health insurance?",
-        a: "Yes. Reframe Physio is an approved Southern Cross provider. We recommend checking your policy for physiotherapy cover details before your appointment. Our team can assist with any queries about claiming.",
+        q: "Does Reframe Physio accept Southern Cross insurance for physiotherapy treatments?",
+        a: "Yes, Reframe Physio is an approved provider for Southern Cross Health Insurance. This means if you have a Southern Cross policy that includes physiotherapy benefits, you can use it to cover a portion or all of your treatment costs at our clinic.",
       },
       {
-        q: "Is parking available?",
-        a: "Yes, parking is available at Anglican House. There is also street parking nearby on Mulgrave Street and surrounding streets. We're well-served by Wellington's central bus routes.",
+        q: "Is there parking available at Reframe Physio?",
+        a: "Yes, Reframe Physio offers convenient on-site parking for all clients. If you have any specific parking concerns or need assistance, our friendly staff is always ready to help. We look forward to welcoming you to Reframe Physio, where your comfort and ease are our priorities.",
+        extra: <ParkingVideoModal />,
       },
       {
-        q: "Do I need a referral to see a physiotherapist?",
-        a: "No referral is required. You can book directly with us at any time. However, if your GP or specialist has provided a referral letter with relevant clinical notes, please bring it along — it helps us understand your history more quickly.",
+        q: "Do I need a referral to book an appointment at Reframe Physio?",
+        a: "No, you do not need a referral to book an appointment at Reframe Physio. Our experienced physiotherapist, John, who has over a decade of expertise in musculoskeletal, pain, vestibular, and concussion rehabilitation, is readily available to assist you directly.",
       },
       {
-        q: "Can you assist with ACC claims?",
-        a: "Yes. We are an ACC registered provider and can help you navigate your ACC claim. If you have an existing ACC claim number, please bring it to your first appointment. We can also help initiate a new ACC claim if your injury qualifies.",
+        q: "Can you assist with making an ACC claim?",
+        a: "During your initial consultation, John will assess your condition and determine if it qualifies for ACC coverage. If eligible, he will assist you in completing the necessary paperwork and submitting your claim to ensure you receive the required support for your treatment. This process allows you to focus on your recovery while we handle the administrative details. For more specific information regarding ACC claims, feel free to contact us directly.",
       },
     ],
   },
@@ -314,7 +322,7 @@ export default function FAQ() {
             Have a question that&apos;s not answered here?
           </p>
           <a
-            href="mailto:reframephysio@gmail.com"
+            href="/#booking"
             className="inline-flex items-center gap-2 border border-linen text-grove text-sm font-medium px-5 py-2.5 rounded-full hover:bg-foam hover:border-mint transition-colors"
           >
             Get in touch

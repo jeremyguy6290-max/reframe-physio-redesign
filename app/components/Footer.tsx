@@ -1,6 +1,7 @@
 import { Phone, Mail, MapPin, ArrowRight } from "lucide-react";
 import Logo from "./Logo";
 import { CLINIKO_URL } from "../lib/booking";
+import { HOURS_PRIMARY, HOURS_SECONDARY } from "../lib/hours";
 
 const quickLinks = [
   { label: "Services", href: "#services" },
@@ -113,10 +114,10 @@ export default function Footer() {
                 Hours
               </p>
               <p className="text-[13.5px] text-mint/65">
-                Tues, Wed, Fri: 8:00am – 6:00pm
+                {HOURS_PRIMARY}
               </p>
               <p className="text-xs text-mint/40 mt-0.5">
-                Mon, Thurs, Sat &amp; Sun: by appointment
+                {HOURS_SECONDARY}
               </p>
             </div>
           </div>
