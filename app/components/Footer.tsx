@@ -129,9 +129,21 @@ export default function Footer() {
           <p className="text-xs text-mint/35">
             © {new Date().getFullYear()} Reframe Physio. All rights reserved.
           </p>
-          <p className="text-xs text-mint/35">
-            Anglican House, 32 Mulgrave St, Wellington
-          </p>
+          <div className="flex items-center gap-4">
+            <a
+              href="/privacy-policy"
+              className="text-xs text-mint/40 hover:text-mint/70 transition-colors duration-150"
+            >
+              Privacy Policy
+            </a>
+            <span className="text-mint/20 text-xs">·</span>
+            <a
+              href="/accessibility-statement"
+              className="text-xs text-mint/40 hover:text-mint/70 transition-colors duration-150"
+            >
+              Accessibility Statement
+            </a>
+          </div>
         </div>
       </div>
     </footer>

@@ -6,13 +6,13 @@ import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
 import { CLINIKO_URL } from "../lib/booking";
 
-const navLinks = [
+const navLinks: { label: string; href: string; external?: boolean }[] = [
   { label: "Services", href: "/#services" },
   { label: "About", href: "/#about" },
   { label: "Booking", href: "/#booking" },
   { label: "Referrals", href: "/#referrals" },
   { label: "FAQ", href: "/#faq" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Contact", href: "/#booking" },
 ];
 
 export default function Header() {
@@ -42,10 +42,11 @@ export default function Header() {
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-7" aria-label="Main navigation">
-            {navLinks.map(({ label, href }) => (
+            {navLinks.map(({ label, href, external }) => (
               <a
                 key={label}
                 href={href}
+                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className="text-[13.5px] font-medium text-charcoal hover:text-grove transition-colors duration-200 relative after:absolute after:bottom-[-2px] after:left-0 after:h-px after:w-0 after:bg-grove after:transition-all after:duration-200 hover:after:w-full"
               >
                 {label}
@@ -86,10 +87,11 @@ export default function Header() {
       {menuOpen && (
         <div className="lg:hidden bg-cream border-t border-linen shadow-xl shadow-forest/5">
           <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col gap-1">
-            {navLinks.map(({ label, href }) => (
+            {navLinks.map(({ label, href, external }) => (
               <a
                 key={label}
                 href={href}
+                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className="py-3 px-3 text-sm font-medium text-charcoal hover:text-grove hover:bg-foam rounded-xl transition-colors"
                 onClick={() => setMenuOpen(false)}
               >

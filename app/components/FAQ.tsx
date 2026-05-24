@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Plus, Minus, ExternalLink } from "lucide-react";
+import { Plus, Minus, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import { CLINIKO_URL } from "../lib/booking";
 
 interface FaqItem {
@@ -116,16 +116,50 @@ const categories: Category[] = [
 export default function FAQ() {
   const [activeCat, setActiveCat] = useState(0);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const checkScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 2);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 2);
+  }, []);
+
+  useEffect(() => {
+    checkScroll();
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", checkScroll, { passive: true });
+    const ro = new ResizeObserver(checkScroll);
+    ro.observe(el);
+    return () => {
+      el.removeEventListener("scroll", checkScroll);
+      ro.disconnect();
+    };
+  }, [checkScroll]);
+
+  function scrollTabs(amount: number) {
+    scrollRef.current?.scrollBy({ left: amount, behavior: "smooth" });
+  }
 
   function handleCatChange(idx: number) {
     setActiveCat(idx);
     setOpenIndex(null);
+    tabRefs.current[idx]?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "nearest",
+    });
   }
 
   const currentFaqs = categories[activeCat].faqs;
 
   return (
-    <section id="faq" className="bg-parchment py-24 lg:py-32">
+    <section id="faq" className="bg-parchment py-24 lg:py-32 scroll-mt-32">
       <div className="max-w-3xl mx-auto px-6 lg:px-10">
 
         {/* Heading */}
@@ -150,22 +184,55 @@ export default function FAQ() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.4 }}
-          className="flex gap-2 overflow-x-auto pb-1 mb-8"
-          style={{ scrollbarWidth: "none" }}
+          className="relative mb-8"
         >
-          {categories.map((cat, i) => (
-            <button
-              key={cat.label}
-              onClick={() => handleCatChange(i)}
-              className={`flex-shrink-0 text-[12.5px] font-medium px-4 py-2 rounded-full transition-colors duration-200 ${
-                activeCat === i
-                  ? "bg-grove text-cream"
-                  : "bg-cream text-charcoal border border-linen hover:border-mint/60 hover:text-grove"
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
+          {/* Left fade + arrow */}
+          <div
+            aria-hidden="true"
+            className={`absolute left-0 top-0 bottom-0 w-10 bg-gradient-to-r from-parchment to-transparent z-10 pointer-events-none transition-opacity duration-200 ${canScrollLeft ? "opacity-100" : "opacity-0"}`}
+          />
+          <button
+            onClick={() => scrollTabs(-140)}
+            aria-label="Scroll FAQ categories left"
+            className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-cream border border-linen flex items-center justify-center text-fern hover:text-grove hover:border-mint/60 shadow-sm transition-all duration-200 ${canScrollLeft ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+          >
+            <ChevronLeft size={13} strokeWidth={2.5} />
+          </button>
+
+          {/* Scrollable tab row */}
+          <div
+            ref={scrollRef}
+            className="flex gap-2 overflow-x-auto pb-1"
+            style={{ scrollbarWidth: "none" }}
+          >
+            {categories.map((cat, i) => (
+              <button
+                key={cat.label}
+                ref={(el) => { tabRefs.current[i] = el; }}
+                onClick={() => handleCatChange(i)}
+                className={`flex-shrink-0 text-[12.5px] font-medium px-4 py-2 rounded-full transition-colors duration-200 ${
+                  activeCat === i
+                    ? "bg-grove text-cream"
+                    : "bg-cream text-charcoal border border-linen hover:border-mint/60 hover:text-grove"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Right fade + arrow */}
+          <div
+            aria-hidden="true"
+            className={`absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-parchment to-transparent z-10 pointer-events-none transition-opacity duration-200 ${canScrollRight ? "opacity-100" : "opacity-0"}`}
+          />
+          <button
+            onClick={() => scrollTabs(140)}
+            aria-label="Scroll FAQ categories right"
+            className={`absolute right-0 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-cream border border-linen flex items-center justify-center text-fern hover:text-grove hover:border-mint/60 shadow-sm transition-all duration-200 ${canScrollRight ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+          >
+            <ChevronRight size={13} strokeWidth={2.5} />
+          </button>
         </motion.div>
 
         {/* Accordion — re-animates on category change */}

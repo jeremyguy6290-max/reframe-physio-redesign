@@ -14,7 +14,7 @@ const trustPoints = [
 
 export default function Booking() {
   return (
-    <section id="booking" className="bg-parchment py-24 lg:py-32">
+    <section id="booking" className="bg-parchment py-24 lg:py-32 scroll-mt-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="grid lg:grid-cols-[5fr_7fr] gap-12 lg:gap-16 items-start">
 

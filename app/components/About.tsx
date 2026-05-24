@@ -23,7 +23,7 @@ const specialisms = [
 
 export default function About() {
   return (
-    <section id="about" className="bg-cream py-24 lg:py-32 overflow-hidden">
+    <section id="about" className="bg-cream py-24 lg:py-32 overflow-hidden scroll-mt-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         {/* Section label centred above */}
         <motion.div

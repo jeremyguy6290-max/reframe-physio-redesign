@@ -32,7 +32,7 @@ const details = [
 
 export default function Location() {
   return (
-    <section id="contact" className="bg-cream py-24 lg:py-32">
+    <section id="contact" className="bg-cream py-24 lg:py-32 scroll-mt-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left: info */}

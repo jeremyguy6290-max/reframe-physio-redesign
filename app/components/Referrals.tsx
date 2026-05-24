@@ -23,7 +23,7 @@ const referralTypes = [
 
 export default function Referrals() {
   return (
-    <section id="referrals" className="bg-grove py-24 lg:py-32 relative overflow-hidden">
+    <section id="referrals" className="bg-grove py-24 lg:py-32 relative overflow-hidden scroll-mt-32">
       {/* Background texture */}
       <div
         aria-hidden="true"
