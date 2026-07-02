@@ -178,10 +178,10 @@ export default function FAQ() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-10"
         >
-          <span className="text-xs font-semibold tracking-widest uppercase text-fern">
+          <span className="font-display text-[11px] font-semibold tracking-[0.22em] uppercase text-fern">
             Common questions
           </span>
-          <h2 className="font-serif text-3xl lg:text-4xl text-forest mt-3 leading-[1.15]">
+          <h2 className="font-display font-bold text-3xl lg:text-[2.8rem] text-forest mt-4 leading-[1.05] tracking-[-0.025em]">
             Frequently asked questions
           </h2>
         </motion.div>

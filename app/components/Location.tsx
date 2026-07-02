@@ -57,18 +57,17 @@ export default function Location() {
             className="flex flex-col gap-8"
           >
             <div>
-              <span className="text-xs font-semibold tracking-widest uppercase text-fern">
+              <span className="font-display text-[11px] font-semibold tracking-[0.22em] uppercase text-fern">
                 Find us
               </span>
-              <h2 className="font-serif text-3xl lg:text-4xl text-forest mt-3 leading-[1.15]">
+              <h2 className="font-display font-bold text-3xl lg:text-[2.8rem] text-forest mt-4 leading-[1.05] tracking-[-0.025em]">
                 Central Wellington,
                 <br />
                 easy to reach
               </h2>
-              <p className="mt-4 text-[15px] text-charcoal leading-relaxed">
-                Anglican House is a well-known building right in the heart of
-                Wellington&apos;s CBD, close to central bus routes and easy to
-                reach by car or public transport.
+              <p className="mt-4 text-[15px] text-charcoal/80 leading-relaxed">
+                Anglican House, in the heart of the CBD — easy to reach by car,
+                bus, or on foot.
               </p>
             </div>
 

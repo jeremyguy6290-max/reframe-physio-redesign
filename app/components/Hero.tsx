@@ -36,13 +36,15 @@ export default function Hero() {
         <source src="/videos/hero-reference.mp4" type="video/mp4" />
       </video>
 
-      {/* Gradient — clears in the middle, darkens at bottom for headline legibility */}
+      {/* Gradient — clears in the middle, then dissolves fully into forest
+          (#1B3A2C) well before the section ends, so the boundary with the
+          services section below is invisible. The final 10% is solid forest. */}
       <div
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "linear-gradient(to bottom, rgba(27,58,44,0.30) 0%, rgba(27,58,44,0.08) 35%, rgba(27,58,44,0.52) 68%, rgba(27,58,44,0.88) 100%)",
+            "linear-gradient(to bottom, rgba(27,58,44,0.30) 0%, rgba(27,58,44,0.06) 32%, rgba(27,58,44,0.35) 55%, rgba(27,58,44,0.72) 72%, rgba(27,58,44,0.94) 84%, rgba(27,58,44,1.00) 90%)",
         }}
       />
 
@@ -57,11 +59,11 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="text-[11px] font-semibold tracking-[0.18em] uppercase text-cream/50 mb-5">
+            <p className="font-display text-[11px] font-semibold tracking-[0.22em] uppercase text-cream/50 mb-5">
               Wellington · Specialist physiotherapy
             </p>
 
-            <h1 className="font-serif text-[2.9rem] sm:text-[3.8rem] lg:text-[4.8rem] xl:text-[5.4rem] text-cream leading-[1.04] tracking-[-0.03em] mb-5">
+            <h1 className="font-display font-bold text-[2.7rem] sm:text-[3.6rem] lg:text-[4.6rem] xl:text-[5.2rem] text-cream leading-[0.98] tracking-[-0.035em] mb-5">
               Pain, dizziness
               <br />
               and concussion.

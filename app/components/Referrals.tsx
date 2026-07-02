@@ -44,21 +44,16 @@ export default function Referrals() {
             transition={{ duration: 0.65, ease: "easeOut" }}
             className="flex flex-col gap-6"
           >
-            <span className="text-xs font-semibold tracking-widest uppercase text-sage">
+            <span className="font-display text-[11px] font-semibold tracking-[0.22em] uppercase text-sage">
               For healthcare providers
             </span>
-            <h2 className="font-serif text-3xl lg:text-4xl text-cream leading-[1.15]">
+            <h2 className="font-display font-bold text-3xl lg:text-[2.8rem] text-cream leading-[1.05] tracking-[-0.025em]">
               Referrals
             </h2>
             <p className="text-[15px] text-mint/80 leading-relaxed">
-              Healthcare providers can refer patients for specialist
-              physiotherapy support across pain, vestibular, concussion and
-              FND presentations.
-            </p>
-            <p className="text-[15px] text-mint/80 leading-relaxed">
               We accept referrals from GPs, specialists, and allied health
-              professionals. No formal referral letter is required — a brief
-              clinical summary is welcome but not mandatory.
+              professionals. No formal referral letter required — a brief
+              clinical summary is welcome.
             </p>
 
             <div className="flex flex-col gap-3 pt-2">

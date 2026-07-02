@@ -3,6 +3,7 @@
 @theme inline {
   --font-sans: var(--font-dm-sans);
   --font-serif: var(--font-dm-serif);
+  --font-display: var(--font-archivo);
 }
 
 @theme {
@@ -17,6 +18,7 @@
   --color-linen: #E5DDD0;
   --color-charcoal: #374151;
   --color-ash: #9CA3AF;
+  --color-ink: #0A0F0C;
 }
 
 html {
@@ -33,4 +35,13 @@ body {
 ::selection {
   background-color: #A8D4B6;
   color: #1B3A2C;
+}
+
+/* Hide scrollbar on horizontal snap rails while keeping them scrollable */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, DM_Serif_Display } from "next/font/google";
+import { DM_Sans, DM_Serif_Display, Archivo } from "next/font/google";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -12,6 +12,11 @@ const dmSerif = DM_Serif_Display({
   variable: "--font-dm-serif",
   subsets: ["latin"],
   weight: ["400"],
+});
+
+const archivo = Archivo({
+  variable: "--font-archivo",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -28,7 +33,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${dmSerif.variable}`}
+      className={`${dmSans.variable} ${dmSerif.variable} ${archivo.variable}`}
     >
       <body className="min-h-full flex flex-col overflow-x-hidden">
         {children}

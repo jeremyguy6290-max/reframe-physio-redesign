@@ -34,7 +34,7 @@ export default function About() {
           className="flex items-center gap-3 mb-12"
         >
           <div className="h-px flex-1 bg-linen" />
-          <span className="text-xs font-semibold tracking-[0.14em] uppercase text-fern whitespace-nowrap">
+          <span className="font-display text-[11px] font-semibold tracking-[0.22em] uppercase text-fern whitespace-nowrap">
             Meet your physiotherapist
           </span>
           <div className="h-px flex-1 bg-linen" />
@@ -50,10 +50,10 @@ export default function About() {
             className="flex flex-col gap-7"
           >
             <div>
-              <h2 className="font-serif text-4xl lg:text-5xl text-forest leading-[1.08] tracking-[-0.02em]">
+              <h2 className="font-display font-bold text-4xl lg:text-[3.4rem] text-forest leading-[1.02] tracking-[-0.03em]">
                 John Lee
               </h2>
-              <p className="text-base text-fern font-medium mt-2">
+              <p className="text-base text-fern font-medium mt-3">
                 Founder &amp; Senior Physiotherapist
               </p>
             </div>

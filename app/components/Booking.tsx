@@ -14,7 +14,7 @@ const trustPoints = [
 
 export default function Booking() {
   return (
-    <section id="booking" className="bg-parchment py-24 lg:py-32 scroll-mt-32">
+    <section id="booking" className="bg-ink py-24 lg:py-32 scroll-mt-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="grid lg:grid-cols-[5fr_7fr] gap-12 lg:gap-16 items-start">
 
@@ -27,17 +27,15 @@ export default function Booking() {
             className="lg:sticky lg:top-28 flex flex-col gap-6"
           >
             <div>
-              <span className="text-xs font-semibold tracking-widest uppercase text-fern">
+              <span className="font-display text-[11px] font-semibold tracking-[0.22em] uppercase text-sage">
                 Make an appointment
               </span>
-              <h2 className="font-serif text-3xl lg:text-4xl text-forest mt-3 leading-[1.15]">
+              <h2 className="font-display font-bold text-3xl lg:text-[2.8rem] text-cream mt-4 leading-[1.05] tracking-[-0.025em]">
                 Book your appointment
               </h2>
-              <p className="mt-4 text-[15px] text-charcoal leading-relaxed">
-                We use Cliniko to manage all bookings. Click the button to open
-                our online booking page — choose your service, pick a time, and
-                you&apos;re done. For urgent or complex enquiries, call or email
-                us directly.
+              <p className="mt-4 text-[15px] text-[#C6C2B6] leading-relaxed">
+                All bookings run through Cliniko — choose your service, pick a
+                time, done.
               </p>
             </div>
 
@@ -45,29 +43,29 @@ export default function Booking() {
             <div className="flex flex-col gap-3">
               <a
                 href="tel:0272414888"
-                className="flex items-center gap-3 text-sm text-charcoal hover:text-grove transition-colors group"
+                className="flex items-center gap-3 text-sm text-[#E5DDD0] hover:text-cream transition-colors group"
               >
-                <span className="w-9 h-9 rounded-lg bg-foam border border-mint/50 flex items-center justify-center flex-shrink-0 group-hover:bg-mint/30 transition-colors">
-                  <Phone size={15} className="text-fern" />
+                <span className="w-9 h-9 rounded-lg bg-white/[0.06] border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white/10 transition-colors">
+                  <Phone size={15} className="text-sage" />
                 </span>
                 027 241 4888
               </a>
               <a
                 href="mailto:reframephysio@gmail.com"
-                className="flex items-center gap-3 text-sm text-charcoal hover:text-grove transition-colors group"
+                className="flex items-center gap-3 text-sm text-[#E5DDD0] hover:text-cream transition-colors group"
               >
-                <span className="w-9 h-9 rounded-lg bg-foam border border-mint/50 flex items-center justify-center flex-shrink-0 group-hover:bg-mint/30 transition-colors">
-                  <Mail size={15} className="text-fern" />
+                <span className="w-9 h-9 rounded-lg bg-white/[0.06] border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white/10 transition-colors">
+                  <Mail size={15} className="text-sage" />
                 </span>
                 reframephysio@gmail.com
               </a>
             </div>
 
             {/* Trust points */}
-            <div className="bg-cream rounded-2xl p-5 border border-linen">
+            <div className="bg-white/[0.04] rounded-2xl p-5 border border-white/10">
               <div className="flex items-center gap-2 mb-3">
-                <Calendar size={14} className="text-fern" />
-                <p className="text-xs font-semibold text-grove uppercase tracking-wide">
+                <Calendar size={14} className="text-sage" />
+                <p className="font-display text-xs font-semibold text-sage uppercase tracking-[0.14em]">
                   Good to know
                 </p>
               </div>
@@ -75,7 +73,7 @@ export default function Booking() {
                 {trustPoints.map((point) => (
                   <li
                     key={point}
-                    className="flex items-center gap-2.5 text-sm text-charcoal"
+                    className="flex items-center gap-2.5 text-sm text-[#D8D4C8]"
                   >
                     <CheckCircle2 size={14} className="text-sage flex-shrink-0" />
                     {point}
@@ -92,20 +90,19 @@ export default function Booking() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           >
-            <div className="bg-cream rounded-3xl p-8 lg:p-10 border border-linen flex flex-col gap-8">
+            <div className="bg-cream rounded-3xl p-8 lg:p-10 flex flex-col gap-8">
 
               {/* Heading */}
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.13em] text-fern mb-3">
+                <p className="font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-fern mb-3">
                   Online booking
                 </p>
-                <h3 className="font-serif text-2xl lg:text-3xl text-forest leading-[1.15] mb-3">
+                <h3 className="font-display font-bold text-2xl lg:text-[1.9rem] text-forest leading-[1.08] tracking-[-0.02em] mb-3">
                   Book online through Cliniko
                 </h3>
-                <p className="text-[14.5px] text-charcoal leading-relaxed">
-                  Our appointment calendar is managed through Cliniko. Select
-                  your service, choose a date and time that works for you, and
-                  complete your booking in a few steps.
+                <p className="text-[14.5px] text-charcoal/80 leading-relaxed">
+                  Select your service, choose a time, and complete your booking
+                  in a few steps.
                 </p>
               </div>
 
@@ -125,7 +122,7 @@ export default function Booking() {
 
               {/* Prefer to call/email */}
               <div>
-                <p className="text-[12px] font-semibold uppercase tracking-widest text-ash mb-4">
+                <p className="font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-ash mb-4">
                   Prefer to contact us directly?
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3">
