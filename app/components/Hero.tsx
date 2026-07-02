@@ -1,127 +1,94 @@
 "use client";
 
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import { CLINIKO_URL } from "../lib/booking";
 
 export default function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (shouldReduceMotion) {
+      video.pause();
+    } else {
+      video.play().catch(() => {});
+    }
+  }, [shouldReduceMotion]);
+
   return (
-    <section className="relative overflow-hidden bg-cream" style={{ minHeight: "100svh" }}>
+    <section className="relative overflow-hidden bg-forest" style={{ minHeight: "100svh" }}>
 
-      {/* ── Layer 1: Background image (desktop only) ──────────────────────── */}
-      <div className="absolute inset-0 hidden lg:block">
-        <Image
-          src="/images/hero-physio-new.jpg"
-          alt="Specialist physiotherapy treatment at Reframe Physio, Wellington"
-          fill
-          className="object-cover"
-          style={{ objectPosition: "75% center" }}
-          priority
-          quality={90}
-          sizes="100vw"
-        />
-      </div>
-
-      {/* ── Layer 2: Left-to-right parchment fade (desktop only) ────────────
-           Parchment = #F0EBE0 = rgba(240,235,224) — matches Services below  */}
-      <div
+      {/* Full-bleed background video — poster image shown while loading / as fallback */}
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        loop
+        playsInline
+        poster="/images/hero-physio-new.jpg"
+        className="absolute inset-0 w-full h-full object-cover"
         aria-hidden="true"
-        className="absolute inset-0 pointer-events-none hidden lg:block"
-        style={{
-          background:
-            "linear-gradient(to right, rgba(240,235,224,0.94) 0%, rgba(240,235,224,0.84) 28%, rgba(240,235,224,0.50) 50%, rgba(240,235,224,0.14) 72%, rgba(240,235,224,0.00) 100%)",
-        }}
-      />
-
-      {/* ── Layer 3: Bottom parchment fade into Services section ────────────
-           Fades to parchment (#F0EBE0) so the hero dissolves into the
-           What We Treat section with no visible seam or colour mismatch.     */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 pointer-events-none hidden lg:block"
-        style={{
-          background:
-            "linear-gradient(to bottom, rgba(240,235,224,0.00) 50%, rgba(240,235,224,0.35) 74%, rgba(240,235,224,0.75) 91%, rgba(240,235,224,1.00) 100%)",
-        }}
-      />
-
-      {/* ── Layer 3: Foreground content ──────────────────────────────────── */}
-      <div
-        className="relative z-10 flex flex-col justify-center"
-        style={{ minHeight: "100svh", paddingTop: "108px" }}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full py-20 lg:py-28">
-          <div className="max-w-[540px]">
-            <motion.div
-              initial={{ opacity: 0, y: 32 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              className="flex flex-col"
-            >
-              {/* Eyebrow */}
-              <span className="text-[11.5px] font-semibold tracking-[0.16em] uppercase text-fern mb-8">
-                Wellington&rsquo;s specialist physio clinic
-              </span>
+        <source src="/videos/hero-reference.mp4" type="video/mp4" />
+      </video>
 
-              {/* Headline */}
-              <h1 className="font-serif text-[2.5rem] sm:text-[3rem] lg:text-[3.1rem] xl:text-[3.4rem] text-forest leading-[1.12] tracking-[-0.025em] mb-7">
-                Specialist physio{" "}
-                <br className="hidden lg:block" />
-                for pain, dizziness{" "}
-                <br className="hidden lg:block" />
-                and concussion.
-              </h1>
+      {/* Gradient — clears in the middle, darkens at bottom for headline legibility */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(27,58,44,0.30) 0%, rgba(27,58,44,0.08) 35%, rgba(27,58,44,0.52) 68%, rgba(27,58,44,0.88) 100%)",
+        }}
+      />
 
-              {/* Supporting copy */}
-              <p className="text-[15.5px] lg:text-[16.5px] text-charcoal/85 leading-[1.75] mb-9">
-                Evidence-based care for complex movement conditions in central
-                Wellington. We help you understand what&rsquo;s happening,
-                rebuild confidence, and move better.
-              </p>
+      {/* Content anchored to bottom of viewport */}
+      <div
+        className="relative z-10 flex flex-col justify-end"
+        style={{ minHeight: "100svh", paddingTop: "112px" }}
+      >
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full pb-16 lg:pb-24">
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <p className="text-[11px] font-semibold tracking-[0.18em] uppercase text-cream/50 mb-5">
+              Wellington · Specialist physiotherapy
+            </p>
 
-              {/* CTAs */}
-              <div className="flex flex-wrap items-center gap-3 mb-9">
-                <a
-                  href={CLINIKO_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-grove text-cream font-semibold text-[13.5px] px-6 py-3.5 rounded-full hover:bg-forest transition-colors duration-200 shadow-lg shadow-grove/25"
-                >
-                  Book an appointment
-                  <ArrowRight size={14} strokeWidth={2.5} />
-                </a>
-                <a
-                  href="/#services"
-                  className="inline-flex items-center gap-2 text-grove font-medium text-[13.5px] px-6 py-3.5 rounded-full border border-grove/30 bg-cream hover:bg-foam hover:border-grove/50 transition-colors duration-200"
-                >
-                  View services
-                </a>
-              </div>
+            <h1 className="font-serif text-[2.9rem] sm:text-[3.8rem] lg:text-[4.8rem] xl:text-[5.4rem] text-cream leading-[1.04] tracking-[-0.03em] mb-5">
+              Pain, dizziness
+              <br />
+              and concussion.
+            </h1>
 
-              {/* Trust chips */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.55, duration: 0.6 }}
-                className="flex flex-wrap gap-2"
+            <p className="text-[15px] lg:text-[17px] text-cream/65 mb-9 max-w-xs lg:max-w-sm leading-[1.7]">
+              Specialist evidence-based physiotherapy in central Wellington.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <a
+                href={CLINIKO_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-cream text-forest font-semibold text-[13.5px] px-7 py-4 rounded-full hover:bg-parchment transition-colors duration-200 shadow-lg shadow-forest/30"
               >
-                {[
-                  "ACC provider",
-                  "Southern Cross approved",
-                  "No referral needed",
-                ].map((item) => (
-                  <span
-                    key={item}
-                    className="inline-flex items-center gap-1.5 bg-cream border border-fern/30 text-charcoal text-[12px] font-medium px-3 py-1.5 rounded-full"
-                  >
-                    <CheckCircle2 size={11} className="text-fern flex-shrink-0" />
-                    {item}
-                  </span>
-                ))}
-              </motion.div>
-            </motion.div>
-          </div>
+                Book an appointment
+                <ArrowRight size={14} strokeWidth={2.5} />
+              </a>
+              <a
+                href="/#services"
+                className="inline-flex items-center text-cream/80 font-medium text-[13.5px] px-7 py-4 rounded-full border border-cream/25 hover:border-cream/45 hover:text-cream transition-colors duration-200"
+              >
+                Our services
+              </a>
+            </div>
+          </motion.div>
         </div>
       </div>
 

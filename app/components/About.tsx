@@ -61,15 +61,13 @@ export default function About() {
             <div className="flex flex-col gap-3 text-[15px] text-charcoal leading-[1.75]">
               <p>
                 John Lee is the founder and senior physiotherapist at Reframe
-                Physio. He has over a decade of experience across pain
-                management, FND, autonomic dysfunction, concussion, vestibular
-                physiotherapy and manual therapy.
+                Physio, with over a decade of specialist experience across
+                pain, FND, concussion, and vestibular physiotherapy.
               </p>
               <p>
-                John&apos;s approach is grounded in the belief that complex
-                presentations deserve thoughtful, specialised care — not
-                generic protocols. He takes the time to understand each
-                patient&apos;s full picture before treatment begins.
+                He takes the time to understand each patient&apos;s full
+                picture — then builds a treatment plan that actually fits their
+                life.
               </p>
             </div>
 

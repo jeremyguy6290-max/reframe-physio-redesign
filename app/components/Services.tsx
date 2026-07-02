@@ -1,179 +1,229 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
-import { Activity, RotateCcw, Zap, GitBranch, Hand, ArrowRight, CalendarCheck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { CLINIKO_URL } from "../lib/booking";
 
-const services = [
+// Custom line icons — specialist SVGs, not generic Lucide icons
+function PainIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true" className="w-full h-full">
+      <circle cx="12" cy="12" r="3" />
+      <line x1="12" y1="3" x2="12" y2="7" />
+      <line x1="12" y1="17" x2="12" y2="21" />
+      <line x1="3" y1="12" x2="7" y2="12" />
+      <line x1="17" y1="12" x2="21" y2="12" />
+      <line x1="5.64" y1="5.64" x2="8.46" y2="8.46" />
+      <line x1="15.54" y1="15.54" x2="18.36" y2="18.36" />
+      <line x1="18.36" y1="5.64" x2="15.54" y2="8.46" />
+      <line x1="8.46" y1="15.54" x2="5.64" y2="18.36" />
+    </svg>
+  );
+}
+
+function VestibularIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="w-full h-full">
+      <path d="M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10" />
+      <path d="M22 12 18 8l-4 4" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+function ConcussionIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="w-full h-full">
+      <path d="M9 22h6" />
+      <path d="M12 22v-3" />
+      <path d="M12 3a7 7 0 0 1 7 7c0 3.5-2 6-4 7H9c-2-1-4-3.5-4-7a7 7 0 0 1 7-7z" />
+      <path d="M9.5 11c.5-1 1.5-1.5 2.5-1.5s2 .5 2.5 1.5" />
+    </svg>
+  );
+}
+
+function FNDIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="w-full h-full">
+      <circle cx="12" cy="4" r="2" />
+      <line x1="12" y1="6" x2="12" y2="11" />
+      <line x1="12" y1="11" x2="7" y2="16" />
+      <line x1="12" y1="11" x2="17" y2="16" />
+      <circle cx="7" cy="18" r="2" />
+      <circle cx="17" cy="18" r="2" />
+    </svg>
+  );
+}
+
+function ManualIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="w-full h-full">
+      <path d="M18 11V6a2 2 0 0 0-4 0v5" />
+      <path d="M14 10V4a2 2 0 0 0-4 0v6" />
+      <path d="M10 10.5V6a2 2 0 0 0-4 0v8.5" />
+      <path d="M18 8a2 2 0 0 1 4 0v6a8 8 0 0 1-8 8h-2c-2.76 0-5-2.24-5-5v-1" />
+    </svg>
+  );
+}
+
+interface Service {
+  Icon: () => React.ReactElement;
+  title: string;
+  href: string;
+  description: string;
+}
+
+const services: Service[] = [
   {
-    icon: Activity,
+    Icon: PainIcon,
     title: "Pain Management",
     href: "/pain-management",
     description:
-      "Chronic pain affects more than the body. We take a whole-person approach — addressing the nervous system, lifestyle, and psychological factors — to help you rebuild confidence and return to meaningful function.",
-    color: "#3D7A55",
-    bg: "#E0EFE5",
+      "Whole-person care for chronic and complex pain — addressing the nervous system, movement, and lifestyle.",
   },
   {
-    icon: RotateCcw,
-    title: "Vestibular Physiotherapy",
+    Icon: VestibularIcon,
+    title: "Vestibular Physio",
     href: "/vestibular-physio",
     description:
-      "Dizziness, vertigo, and balance problems can be debilitating. Using Vesticam assessment technology and specialist vestibular techniques, we identify the source and guide you through evidence-based recovery.",
-    color: "#2C5440",
-    bg: "#E8F4EC",
+      "Evidence-based assessment and treatment for dizziness, vertigo, and balance disorders.",
   },
   {
-    icon: Zap,
+    Icon: ConcussionIcon,
     title: "Concussion Rehab",
     href: "/concussion-rehab",
     description:
-      "Headaches, dizziness, and brain fog after a concussion require careful, graded management. We provide personalised rehabilitation that addresses both physical and cognitive symptoms at the right pace.",
-    color: "#1B3A2C",
-    bg: "#F0EBE0",
+      "Graded, personalised rehabilitation for headaches, brain fog, and post-concussion symptoms.",
   },
   {
-    icon: GitBranch,
+    Icon: FNDIcon,
     title: "FND Rehab",
     href: "/fnd-rehab",
     description:
-      "Functional Neurological Disorder (FND) involves real neurological symptoms without structural damage. Our approach focuses on retraining movement patterns, building body confidence, and restoring control.",
-    color: "#3D7A55",
-    bg: "#E0EFE5",
+      "Movement retraining and body confidence for functional neurological disorder.",
   },
   {
-    icon: Hand,
+    Icon: ManualIcon,
     title: "Manual Therapy",
     href: "/manual-therapy",
     description:
-      "Expert hands-on treatment — joint mobilisation, soft tissue work, and dry needling — integrated with targeted exercise and movement retraining for lasting results.",
-    color: "#2C5440",
-    bg: "#E8F4EC",
+      "Hands-on treatment — joint mobilisation, soft tissue work, and dry needling.",
   },
 ];
 
 const containerVariants: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.09 } },
+  visible: { transition: { staggerChildren: 0.08 } },
 };
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
 };
+
+function ServiceCard({ service }: { service: Service }) {
+  const { Icon, title, href, description } = service;
+  return (
+    <Link
+      href={href}
+      prefetch={true}
+      className="group flex flex-col gap-4 p-6 bg-cream rounded-2xl border border-linen/70 hover:border-mint/60 hover:shadow-md hover:shadow-forest/6 transition-all duration-300 h-full"
+    >
+      <div className="w-10 h-10 rounded-xl bg-foam flex items-center justify-center text-forest flex-shrink-0">
+        <span className="w-[22px] h-[22px] block">
+          <Icon />
+        </span>
+      </div>
+      <div className="flex flex-col gap-2 flex-1">
+        <h3 className="font-serif text-[1.05rem] text-forest leading-snug">
+          {title}
+        </h3>
+        <p className="text-[13.5px] text-charcoal/75 leading-relaxed">
+          {description}
+        </p>
+      </div>
+      <span className="inline-flex items-center gap-1 text-[12px] font-medium text-fern group-hover:gap-1.5 transition-all duration-200">
+        Learn more
+        <ArrowRight
+          size={12}
+          strokeWidth={2.5}
+          className="group-hover:translate-x-0.5 transition-transform duration-200"
+        />
+      </span>
+    </Link>
+  );
+}
 
 export default function Services() {
   return (
     <section id="services" className="bg-parchment py-24 lg:py-32 scroll-mt-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
+
         {/* Section heading */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="max-w-2xl mb-14"
+          className="mb-10 lg:mb-14"
         >
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8 bg-fern" />
-            <span className="text-xs font-semibold tracking-[0.14em] uppercase text-fern">
-              What we treat
-            </span>
-          </div>
-          <h2 className="font-serif text-3xl lg:text-[2.6rem] text-forest leading-[1.12] tracking-[-0.01em]">
-            Specialist services for complex conditions
+          <span className="text-[11px] font-semibold tracking-[0.16em] uppercase text-fern block mb-4">
+            What we treat
+          </span>
+          <h2 className="font-serif text-3xl lg:text-[2.6rem] text-forest leading-[1.1] tracking-[-0.015em]">
+            Specialist services for
+            <br className="hidden lg:block" /> complex conditions.
           </h2>
-          <p className="mt-4 text-[15px] text-charcoal leading-relaxed">
-            Every condition we treat requires more than a generic protocol.
-            We take the time to understand you — then build a plan that fits.
-          </p>
         </motion.div>
 
-        {/* Cards grid */}
+        {/* Desktop: 5-column grid */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-60px" }}
-          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5"
+          className="hidden lg:grid lg:grid-cols-5 gap-4"
         >
-          {services.map((service) => {
-            const Icon = service.icon;
-            return (
-              <motion.div key={service.title} variants={cardVariants}>
-                <Link
-                  href={service.href}
-                  prefetch={true}
-                  className="group relative bg-cream rounded-2xl p-6 lg:p-7 flex flex-col gap-4 border border-linen hover:border-mint/70 hover:shadow-lg hover:shadow-forest/6 transition-all duration-300 h-full"
-                >
-                  {/* Icon */}
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ backgroundColor: service.bg }}
-                  >
-                    <Icon
-                      size={20}
-                      strokeWidth={1.75}
-                      style={{ color: service.color }}
-                    />
-                  </div>
-
-                  {/* Accent line */}
-                  <div
-                    className="w-8 h-0.5 rounded-full"
-                    style={{ backgroundColor: service.color }}
-                  />
-
-                  <h3 className="font-sans font-semibold text-forest text-[17px] leading-snug">
-                    {service.title}
-                  </h3>
-                  <p className="text-sm text-charcoal leading-relaxed flex-1">
-                    {service.description}
-                  </p>
-
-                  <div className="flex items-center gap-1 text-xs font-medium text-fern group-hover:gap-2 transition-all duration-200 pt-1">
-                    Learn more
-                    <ArrowRight
-                      size={13}
-                      className="group-hover:translate-x-1 transition-transform duration-200"
-                    />
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })}
-
-          {/* Sixth card: CTA */}
-          <motion.div
-            variants={cardVariants}
-            className="group relative bg-forest rounded-2xl p-6 lg:p-7 flex flex-col gap-4 border border-grove/60 hover:border-fern/60 hover:shadow-lg hover:shadow-forest/20 transition-all duration-300"
-          >
-            <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-grove/60 border border-fern/30">
-              <CalendarCheck size={20} strokeWidth={1.75} className="text-sage" />
-            </div>
-
-            <div className="w-8 h-0.5 rounded-full bg-fern/50" />
-
-            <h3 className="font-sans font-semibold text-cream text-[17px] leading-snug">
-              Not sure where to start?
-            </h3>
-            <p className="text-sm text-mint/80 leading-relaxed flex-1">
-              Book an initial assessment and we&apos;ll help identify what&apos;s going on,
-              what matters most, and the right next step for you.
-            </p>
-
-            <a
-              href={CLINIKO_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-grove text-cream text-[13px] font-semibold px-5 py-2.5 rounded-full hover:bg-fern transition-colors duration-200 w-fit mt-1"
-            >
-              Book an appointment
-              <ArrowRight size={13} strokeWidth={2.5} className="group-hover:translate-x-0.5 transition-transform duration-200" />
-            </a>
-          </motion.div>
+          {services.map((service) => (
+            <motion.div key={service.title} variants={cardVariants} className="flex">
+              <ServiceCard service={service} />
+            </motion.div>
+          ))}
         </motion.div>
+
+        {/* Mobile: horizontal scroll rail */}
+        <div className="lg:hidden flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory -mx-6 px-6">
+          {services.map((service) => (
+            <div key={service.title} className="min-w-[260px] snap-start flex">
+              <ServiceCard service={service} />
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom CTA strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="mt-10 lg:mt-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-8 border-t border-linen"
+        >
+          <p className="text-[14px] text-charcoal/65">
+            Not sure where to start? Book an initial assessment and we&apos;ll figure it out together.
+          </p>
+          <a
+            href={CLINIKO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-grove text-cream text-[13.5px] font-semibold px-6 py-3 rounded-full hover:bg-forest transition-colors duration-200 whitespace-nowrap shadow-md shadow-grove/15"
+          >
+            Book an appointment
+            <ArrowRight size={13} strokeWidth={2.5} />
+          </a>
+        </motion.div>
+
       </div>
     </section>
   );

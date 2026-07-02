@@ -10,21 +10,21 @@ const pillars = [
     number: "01",
     title: "Specialist experience",
     description:
-      "Over a decade of clinical work across pain management, FND, concussion, vestibular physiotherapy, and manual therapy. We've seen complex — and know how to navigate it.",
+      "Over a decade of specialist work across pain, FND, concussion, and vestibular physiotherapy.",
   },
   {
     icon: HeartHandshake,
     number: "02",
     title: "Whole-person care",
     description:
-      "We don't just treat the symptom. We look at the full picture: your nervous system, your lifestyle, your history, and your goals — then build a plan that actually fits your life.",
+      "We treat the full picture — nervous system, lifestyle, and goals — not just the presenting symptom.",
   },
   {
     icon: ScanSearch,
     number: "03",
     title: "Clear diagnosis first",
     description:
-      "Understanding what's happening in your body is the foundation of good treatment. We take the time to explain your condition in plain language before we start anything.",
+      "We explain what's happening in plain language before any treatment begins.",
   },
 ];
 
