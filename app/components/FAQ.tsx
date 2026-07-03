@@ -38,7 +38,9 @@ const categories: Category[] = [
       {
         q: "Is there parking available at Reframe Physio?",
         a: "Yes, Reframe Physio offers convenient on-site parking for all clients. If you have any specific parking concerns or need assistance, our friendly staff is always ready to help. We look forward to welcoming you to Reframe Physio, where your comfort and ease are our priorities.",
-        extra: <ParkingVideoModal />,
+        extra: (
+          <ParkingVideoModal buttonClassName="inline-flex items-center gap-1.5 text-[12px] font-medium text-mint border border-sage/40 px-3.5 py-2 rounded-full hover:bg-white/[0.06] hover:border-sage/60 transition-colors w-fit" />
+        ),
       },
       {
         q: "Do I need a referral to book an appointment at Reframe Physio?",
@@ -98,7 +100,7 @@ const categories: Category[] = [
               href={CLINIKO_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-grove underline underline-offset-2 hover:text-forest transition-colors"
+              className="text-mint underline underline-offset-2 hover:text-cream transition-colors"
             >
               online booking system
             </a>
@@ -110,7 +112,7 @@ const categories: Category[] = [
             href={CLINIKO_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-[12px] font-medium text-grove border border-grove/25 px-3.5 py-2 rounded-full hover:bg-foam hover:border-grove/40 transition-colors"
+            className="inline-flex items-center gap-1.5 text-[12px] font-medium text-mint border border-sage/40 px-3.5 py-2 rounded-full hover:bg-white/[0.06] hover:border-sage/60 transition-colors"
           >
             Open booking system
             <ExternalLink size={11} strokeWidth={2} />
@@ -167,8 +169,8 @@ export default function FAQ() {
   const currentFaqs = categories[activeCat].faqs;
 
   return (
-    <section id="faq" className="bg-parchment py-24 lg:py-32 scroll-mt-32">
-      <div className="max-w-3xl mx-auto px-6 lg:px-10">
+    <section id="faq" className="bg-grove bg-faq-flow pt-24 pb-16 lg:pt-32 lg:pb-20 scroll-mt-32">
+      <div className="relative z-10 max-w-3xl mx-auto px-6 lg:px-10">
 
         {/* Heading */}
         <motion.div
@@ -178,10 +180,7 @@ export default function FAQ() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-10"
         >
-          <span className="font-display text-[11px] font-semibold tracking-[0.22em] uppercase text-fern">
-            Common questions
-          </span>
-          <h2 className="font-display font-bold text-3xl lg:text-[2.8rem] text-forest mt-4 leading-[1.05] tracking-[-0.025em]">
+          <h2 className="font-display font-bold text-3xl lg:text-[2.8rem] text-cream leading-[1.05] tracking-[-0.025em]">
             Frequently asked questions
           </h2>
         </motion.div>
@@ -197,7 +196,7 @@ export default function FAQ() {
           {/* Left fade + arrow */}
           <div
             aria-hidden="true"
-            className={`absolute left-0 top-0 bottom-0 w-10 bg-gradient-to-r from-parchment to-transparent z-10 pointer-events-none transition-opacity duration-200 ${canScrollLeft ? "opacity-100" : "opacity-0"}`}
+            className={`absolute left-0 top-0 bottom-0 w-10 bg-gradient-to-r from-grove to-transparent z-10 pointer-events-none transition-opacity duration-200 ${canScrollLeft ? "opacity-100" : "opacity-0"}`}
           />
           <button
             onClick={() => scrollTabs(-140)}
@@ -218,13 +217,21 @@ export default function FAQ() {
                 key={cat.label}
                 ref={(el) => { tabRefs.current[i] = el; }}
                 onClick={() => handleCatChange(i)}
-                className={`flex-shrink-0 text-[12.5px] font-medium px-4 py-2 rounded-full transition-colors duration-200 ${
+                className={`relative flex-shrink-0 text-[12.5px] font-medium px-4 py-2 rounded-full border transition-colors duration-200 ${
                   activeCat === i
-                    ? "bg-grove text-cream"
-                    : "bg-cream text-charcoal border border-linen hover:border-mint/60 hover:text-grove"
+                    ? "border-transparent text-forest"
+                    : "bg-white/[0.06] text-mint/80 border-white/10 hover:border-sage/50 hover:text-cream"
                 }`}
               >
-                {cat.label}
+                {activeCat === i && (
+                  <motion.span
+                    layoutId="faq-tab-pill"
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute inset-0 rounded-full bg-cream"
+                    aria-hidden="true"
+                  />
+                )}
+                <span className="relative z-10">{cat.label}</span>
               </button>
             ))}
           </div>
@@ -232,7 +239,7 @@ export default function FAQ() {
           {/* Right fade + arrow */}
           <div
             aria-hidden="true"
-            className={`absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-parchment to-transparent z-10 pointer-events-none transition-opacity duration-200 ${canScrollRight ? "opacity-100" : "opacity-0"}`}
+            className={`absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-grove to-transparent z-10 pointer-events-none transition-opacity duration-200 ${canScrollRight ? "opacity-100" : "opacity-0"}`}
           />
           <button
             onClick={() => scrollTabs(140)}
@@ -256,8 +263,8 @@ export default function FAQ() {
             return (
               <div
                 key={i}
-                className={`bg-cream rounded-2xl border transition-colors duration-200 ${
-                  isOpen ? "border-mint" : "border-linen hover:border-mint/60"
+                className={`bg-white/[0.05] rounded-2xl border transition-colors duration-200 ${
+                  isOpen ? "border-sage/60" : "border-white/10 hover:border-sage/40"
                 }`}
               >
                 <button
@@ -269,7 +276,7 @@ export default function FAQ() {
                 >
                   <span
                     className={`font-sans font-medium text-[15px] leading-snug transition-colors duration-200 ${
-                      isOpen ? "text-grove" : "text-forest"
+                      isOpen ? "text-mint" : "text-cream"
                     }`}
                   >
                     {faq.q}
@@ -277,8 +284,8 @@ export default function FAQ() {
                   <span
                     className={`flex-shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-200 ${
                       isOpen
-                        ? "bg-grove border-grove text-cream"
-                        : "bg-foam border-linen text-fern"
+                        ? "bg-sage border-sage text-forest"
+                        : "bg-white/[0.08] border-white/15 text-sage"
                     }`}
                     aria-hidden="true"
                   >
@@ -294,15 +301,17 @@ export default function FAQ() {
                   id={`faq-answer-${activeCat}-${i}`}
                   role="region"
                   aria-labelledby={`faq-btn-${activeCat}-${i}`}
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+                  className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${
+                    isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
                   }`}
                 >
-                  <div className="px-6 pb-5 flex flex-col gap-4">
-                    <p className="text-sm text-charcoal leading-relaxed">
-                      {faq.a}
-                    </p>
-                    {faq.extra && faq.extra}
+                  <div className="overflow-hidden">
+                    <div className="px-6 pb-5 flex flex-col gap-4">
+                      <p className="text-sm text-mint/80 leading-relaxed">
+                        {faq.a}
+                      </p>
+                      {faq.extra && faq.extra}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -318,12 +327,12 @@ export default function FAQ() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-10 text-center"
         >
-          <p className="text-sm text-charcoal mb-4">
+          <p className="text-sm text-mint/80 mb-4">
             Have a question that&apos;s not answered here?
           </p>
           <a
             href="/#booking"
-            className="inline-flex items-center gap-2 border border-linen text-grove text-sm font-medium px-5 py-2.5 rounded-full hover:bg-foam hover:border-mint transition-colors"
+            className="inline-flex items-center gap-2 border border-sage/40 text-cream text-sm font-medium px-5 py-2.5 rounded-full hover:bg-white/[0.06] hover:border-sage/60 transition-colors"
           >
             Get in touch
           </a>

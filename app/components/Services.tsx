@@ -135,6 +135,15 @@ const panelVariants: Variants = {
   },
 };
 
+const markVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.82 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.18 },
+  },
+};
+
 function PanelContent({
   service,
   active,
@@ -156,18 +165,24 @@ function PanelContent({
 
       {/* Mark — large, central */}
       <div className="flex-1 flex items-center justify-center py-6">
-        <div
-          className={`w-24 h-24 lg:w-28 lg:h-28 text-mint transition-all duration-500 ease-out ${
-            active ? "scale-110 -rotate-3 text-foam" : ""
-          }`}
-        >
-          <Mark />
-        </div>
+        <motion.div variants={markVariants} className="w-24 h-24 lg:w-28 lg:h-28">
+          <div
+            className={`w-full h-full text-mint transition-all duration-500 ease-out ${
+              active ? "scale-110 -rotate-2 -translate-y-1.5 text-foam" : ""
+            }`}
+          >
+            <Mark />
+          </div>
+        </motion.div>
       </div>
 
       {/* Title + reveal */}
       <div>
-        <h3 className="font-display font-bold text-cream text-[1.35rem] lg:text-[1.5rem] leading-[1.05] tracking-[-0.01em] uppercase">
+        <h3
+          className={`font-display font-bold text-cream text-[1.35rem] lg:text-[1.5rem] leading-[1.05] tracking-[-0.01em] uppercase transition-transform duration-500 ease-out ${
+            active ? "-translate-y-0.5" : ""
+          }`}
+        >
           {title[0]}
           <br />
           {title[1]}
@@ -182,9 +197,13 @@ function PanelContent({
             <p className="text-[13.5px] text-mint/75 leading-[1.6]">
               {description}
             </p>
-            <span className="mt-4 inline-flex items-center gap-1.5 text-[12px] font-semibold tracking-wide uppercase text-foam">
+            <span className="group/link mt-4 inline-flex items-center gap-1.5 text-[12px] font-semibold tracking-wide uppercase text-foam">
               Learn more
-              <ArrowRight size={12} strokeWidth={2.5} />
+              <ArrowRight
+                size={12}
+                strokeWidth={2.5}
+                className={`transition-transform duration-300 ${active ? "translate-x-1" : ""}`}
+              />
             </span>
           </div>
         </div>
@@ -198,19 +217,8 @@ export default function Services() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section id="services" className="bg-forest -mt-px py-24 lg:py-32 scroll-mt-32 relative overflow-hidden">
-      {/* Ambient depth behind the panels — kept clear of the top edge so the
-          hero video fade dissolves into this section with no visible seam */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 50% at 80% 45%, rgba(61,122,85,0.16) 0%, transparent 60%)",
-        }}
-      />
-
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
+    <section id="services" className="bg-forest -mt-px pt-20 pb-8 lg:pt-24 lg:pb-10 scroll-mt-32 overflow-hidden">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
 
         {/* Heading */}
         <motion.div
@@ -220,9 +228,6 @@ export default function Services() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-12 lg:mb-16"
         >
-          <span className="font-display text-[11px] font-semibold tracking-[0.22em] uppercase text-sage block mb-5">
-            What we treat
-          </span>
           <h2 className="font-display font-bold text-cream text-[2.3rem] sm:text-[3rem] lg:text-[3.8rem] leading-[1.02] tracking-[-0.03em] max-w-3xl">
             Specialist care for complex symptoms.
           </h2>
@@ -260,7 +265,7 @@ export default function Services() {
                   onMouseEnter={() => setHovered(i)}
                   onFocus={() => setHovered(i)}
                   onBlur={() => setHovered(null)}
-                  className="group relative block h-full rounded-[1.75rem] overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-mint"
+                  className="group relative block h-full rounded-[1.75rem] overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-mint transition-transform duration-200 active:scale-[0.985]"
                   style={{
                     backgroundColor: panelSurfaces[i],
                     opacity: isDimmed ? 0.55 : 1,
@@ -288,32 +293,54 @@ export default function Services() {
         {/* ── Mobile: horizontal snap rail ─────────────────────────────────── */}
         <div className="lg:hidden">
           <div className="no-scrollbar flex gap-3 overflow-x-auto snap-x snap-mandatory -mx-6 px-6 pb-2">
-            {services.map((service) => (
-              <Link
+            {services.map((service, i) => (
+              <motion.div
                 key={service.href}
-                href={service.href}
-                prefetch={true}
-                className="relative snap-center flex flex-shrink-0 w-[80vw] max-w-[340px] min-h-[420px] rounded-[1.5rem] overflow-hidden bg-grove"
+                initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: Math.min(i * 0.07, 0.2) }}
+                className="snap-center flex-shrink-0 flex w-[80vw] max-w-[340px]"
               >
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      "radial-gradient(ellipse 90% 70% at 50% 100%, rgba(111,171,133,0.18) 0%, transparent 65%)",
-                  }}
-                />
-                <PanelContent service={service} active={false} alwaysShowDescription />
-              </Link>
+                <Link
+                  href={service.href}
+                  prefetch={true}
+                  className="relative flex w-full min-h-[420px] rounded-[1.5rem] overflow-hidden bg-grove transition-transform duration-200 active:scale-[0.985]"
+                >
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "radial-gradient(ellipse 90% 70% at 50% 100%, rgba(111,171,133,0.18) 0%, transparent 65%)",
+                    }}
+                  />
+                  <PanelContent service={service} active={false} alwaysShowDescription />
+                </Link>
+              </motion.div>
             ))}
           </div>
-          {/* Scroll hint */}
-          <div className="flex items-center gap-2 mt-5 text-mint/50">
+          {/* Scroll hint — arrow nudges twice when the rail first appears */}
+          <motion.div
+            initial={reduceMotion ? false : { opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="flex items-center gap-2 mt-5 text-mint/50"
+          >
             <span className="text-[11px] font-semibold tracking-[0.18em] uppercase">
               Swipe to explore
             </span>
-            <ArrowRight size={13} strokeWidth={2.5} />
-          </div>
+            <motion.span
+              initial={false}
+              whileInView={reduceMotion ? undefined : { x: [0, 6, 0, 6, 0] }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.6, delay: 1, ease: "easeInOut" }}
+              className="inline-flex"
+            >
+              <ArrowRight size={13} strokeWidth={2.5} />
+            </motion.span>
+          </motion.div>
         </div>
 
         {/* ── CTA strip ────────────────────────────────────────────────────── */}
@@ -322,7 +349,7 @@ export default function Services() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.6, delay: 0.15 }}
-          className="mt-14 lg:mt-16 pt-10 border-t border-fern/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
+          className="mt-14 lg:mt-16 pt-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
         >
           <div>
             <p className="font-display font-bold text-cream text-[1.2rem] tracking-[-0.01em]">
@@ -336,10 +363,14 @@ export default function Services() {
             href={CLINIKO_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-cream text-forest text-[13.5px] font-semibold px-7 py-3.5 rounded-full hover:bg-parchment transition-colors duration-200 whitespace-nowrap"
+            className="group inline-flex items-center gap-2 bg-cream text-forest text-[13.5px] font-semibold px-7 py-3.5 rounded-full hover:bg-parchment transition-colors duration-200 whitespace-nowrap"
           >
             Book an appointment
-            <ArrowRight size={14} strokeWidth={2.5} />
+            <ArrowRight
+              size={14}
+              strokeWidth={2.5}
+              className="transition-transform duration-200 group-hover:translate-x-1"
+            />
           </a>
         </motion.div>
 

@@ -22,7 +22,6 @@ interface LegalPageProps {
 }
 
 export default function LegalPage({
-  label,
   title,
   subtitle,
   intro,
@@ -43,10 +42,7 @@ export default function LegalPage({
             >
               {/* Header */}
               <div className="mb-12">
-                <span className="text-[11px] font-semibold tracking-[0.14em] uppercase text-fern">
-                  {label}
-                </span>
-                <h1 className="font-serif text-4xl lg:text-5xl text-forest mt-3 leading-[1.1] tracking-[-0.02em]">
+                <h1 className="font-serif text-4xl lg:text-5xl text-forest leading-[1.1] tracking-[-0.02em]">
                   {title}
                 </h1>
                 {subtitle && (

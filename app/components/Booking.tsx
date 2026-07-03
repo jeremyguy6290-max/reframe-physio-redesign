@@ -14,8 +14,8 @@ const trustPoints = [
 
 export default function Booking() {
   return (
-    <section id="booking" className="bg-ink py-24 lg:py-32 scroll-mt-32">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+    <section id="booking" className="pt-28 pb-16 lg:pt-36 lg:pb-20 scroll-mt-32">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
         <div className="grid lg:grid-cols-[5fr_7fr] gap-12 lg:gap-16 items-start">
 
           {/* ── Left: info ───────────────────────────────────────────── */}
@@ -27,10 +27,7 @@ export default function Booking() {
             className="lg:sticky lg:top-28 flex flex-col gap-6"
           >
             <div>
-              <span className="font-display text-[11px] font-semibold tracking-[0.22em] uppercase text-sage">
-                Make an appointment
-              </span>
-              <h2 className="font-display font-bold text-3xl lg:text-[2.8rem] text-cream mt-4 leading-[1.05] tracking-[-0.025em]">
+              <h2 className="font-display font-bold text-3xl lg:text-[2.8rem] text-cream leading-[1.05] tracking-[-0.025em]">
                 Book your appointment
               </h2>
               <p className="mt-4 text-[15px] text-[#C6C2B6] leading-relaxed">
@@ -45,7 +42,7 @@ export default function Booking() {
                 href="tel:0272414888"
                 className="flex items-center gap-3 text-sm text-[#E5DDD0] hover:text-cream transition-colors group"
               >
-                <span className="w-9 h-9 rounded-lg bg-white/[0.06] border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white/10 transition-colors">
+                <span className="w-9 h-9 rounded-lg bg-white/[0.06] border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white/10 group-hover:border-sage/40 transition-colors duration-200">
                   <Phone size={15} className="text-sage" />
                 </span>
                 027 241 4888
@@ -54,7 +51,7 @@ export default function Booking() {
                 href="mailto:reframephysio@gmail.com"
                 className="flex items-center gap-3 text-sm text-[#E5DDD0] hover:text-cream transition-colors group"
               >
-                <span className="w-9 h-9 rounded-lg bg-white/[0.06] border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white/10 transition-colors">
+                <span className="w-9 h-9 rounded-lg bg-white/[0.06] border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white/10 group-hover:border-sage/40 transition-colors duration-200">
                   <Mail size={15} className="text-sage" />
                 </span>
                 reframephysio@gmail.com
@@ -111,10 +108,14 @@ export default function Booking() {
                 href={CLINIKO_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2.5 bg-grove text-cream font-semibold text-[14.5px] px-7 py-4 rounded-full hover:bg-forest transition-colors duration-200 shadow-lg shadow-grove/20 w-full sm:w-auto"
+                className="group inline-flex items-center justify-center gap-2.5 bg-grove text-cream font-semibold text-[14.5px] px-7 py-4 rounded-full hover:bg-forest transition-colors duration-200 shadow-lg shadow-grove/20 hover:shadow-xl hover:shadow-grove/30 w-full sm:w-auto"
               >
                 Open Cliniko booking
-                <ExternalLink size={15} strokeWidth={2} />
+                <ExternalLink
+                  size={15}
+                  strokeWidth={2}
+                  className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
               </a>
 
               {/* Divider */}

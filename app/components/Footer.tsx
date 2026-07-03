@@ -16,15 +16,15 @@ const providers = ["ACC registered", "Southern Cross approved"];
 
 export default function Footer() {
   return (
-    <footer className="bg-forest text-cream">
+    <footer className="bg-footer-flow text-cream">
       {/* Main footer */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16 lg:py-20">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pt-24 pb-14 lg:pt-32 lg:pb-16">
         <div className="grid md:grid-cols-[1.6fr_1fr_1.3fr] gap-10 lg:gap-14">
           {/* Col 1: Brand + contact */}
           <div className="flex flex-col gap-6">
             <Logo variant="light" />
 
-            <p className="text-[13.5px] text-mint/65 leading-relaxed max-w-xs">
+            <p className="text-[13.5px] text-mint/75 leading-relaxed max-w-xs">
               Specialist physiotherapy for pain, dizziness, concussion, and
               complex movement conditions in central Wellington.
             </p>
@@ -34,7 +34,7 @@ export default function Footer() {
               {providers.map((p) => (
                 <span
                   key={p}
-                  className="text-[11px] font-medium text-sage bg-grove/50 border border-fern/25 px-3 py-1 rounded-full"
+                  className="text-[11px] font-medium text-mint/90 bg-white/[0.06] border border-sage/30 px-3 py-1 rounded-full"
                 >
                   {p}
                 </span>
@@ -45,19 +45,19 @@ export default function Footer() {
             <div className="flex flex-col gap-2.5">
               <a
                 href="tel:0272414888"
-                className="flex items-center gap-2.5 text-[13.5px] text-mint/75 hover:text-cream transition-colors"
+                className="flex items-center gap-2.5 text-[13.5px] text-mint/80 hover:text-cream transition-colors"
               >
                 <Phone size={13} className="text-sage flex-shrink-0" />
                 027 241 4888
               </a>
               <a
                 href="mailto:reframephysio@gmail.com"
-                className="flex items-center gap-2.5 text-[13.5px] text-mint/75 hover:text-cream transition-colors"
+                className="flex items-center gap-2.5 text-[13.5px] text-mint/80 hover:text-cream transition-colors"
               >
                 <Mail size={13} className="text-sage flex-shrink-0" />
                 reframephysio@gmail.com
               </a>
-              <div className="flex items-start gap-2.5 text-[13.5px] text-mint/75">
+              <div className="flex items-start gap-2.5 text-[13.5px] text-mint/80">
                 <MapPin size={13} className="text-sage flex-shrink-0 mt-0.5" />
                 <span>
                   Anglican House, 32 Mulgrave St
@@ -78,7 +78,7 @@ export default function Footer() {
                 <li key={label}>
                   <a
                     href={href}
-                    className="text-[13.5px] text-mint/65 hover:text-cream transition-colors duration-150"
+                    className="text-[13.5px] text-mint/75 hover:text-cream transition-colors duration-150"
                   >
                     {label}
                   </a>
@@ -93,7 +93,7 @@ export default function Footer() {
               <p className="text-[11px] font-semibold uppercase tracking-widest text-sage mb-4">
                 Ready to get started?
               </p>
-              <p className="text-[13.5px] text-mint/65 leading-relaxed">
+              <p className="text-[13.5px] text-mint/75 leading-relaxed">
                 Book your initial assessment with John Lee. No referral
                 required.
               </p>
@@ -103,20 +103,24 @@ export default function Footer() {
               href={CLINIKO_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-fern text-cream text-sm font-semibold px-5 py-3.5 rounded-full hover:bg-sage hover:text-forest transition-colors duration-200"
+              className="group inline-flex items-center justify-center gap-2 bg-cream text-forest text-sm font-semibold px-5 py-3.5 rounded-full hover:bg-parchment transition-colors duration-200"
             >
               Book an appointment
-              <ArrowRight size={14} strokeWidth={2.5} />
+              <ArrowRight
+                size={14}
+                strokeWidth={2.5}
+                className="transition-transform duration-200 group-hover:translate-x-1"
+              />
             </a>
 
             <div className="pt-1">
               <p className="text-[11px] font-semibold text-sage mb-1.5 uppercase tracking-wider">
                 Hours
               </p>
-              <p className="text-[13.5px] text-mint/65">
+              <p className="text-[13.5px] text-mint/80">
                 {HOURS_PRIMARY}
               </p>
-              <p className="text-xs text-mint/40 mt-0.5">
+              <p className="text-xs text-mint/60 mt-0.5">
                 {HOURS_SECONDARY}
               </p>
             </div>
@@ -125,22 +129,22 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-fern/15">
+      <div className="border-t border-sage/20">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-mint/35">
+          <p className="text-xs text-mint/60">
             © {new Date().getFullYear()} Reframe Physio. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <a
               href="/privacy-policy"
-              className="text-xs text-mint/40 hover:text-mint/70 transition-colors duration-150"
+              className="text-xs text-mint/60 hover:text-cream transition-colors duration-150"
             >
               Privacy Policy
             </a>
-            <span className="text-mint/20 text-xs">·</span>
+            <span className="text-mint/30 text-xs">·</span>
             <a
               href="/accessibility-statement"
-              className="text-xs text-mint/40 hover:text-mint/70 transition-colors duration-150"
+              className="text-xs text-mint/60 hover:text-cream transition-colors duration-150"
             >
               Accessibility Statement
             </a>

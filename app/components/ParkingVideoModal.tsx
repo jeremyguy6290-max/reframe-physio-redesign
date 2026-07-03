@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { X, Play } from "lucide-react";
 
 interface ParkingVideoModalProps {
@@ -58,16 +59,27 @@ export default function ParkingVideoModal({
         {buttonLabel}
       </button>
 
-      {isOpen && (
-        <div
+      <AnimatePresence>
+        {isOpen && (
+        <motion.div
           ref={backdropRef}
           onClick={onBackdropClick}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
           className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-forest/65 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-label="Parking guide video"
         >
-          <div className="bg-cream rounded-2xl overflow-hidden w-full max-w-2xl shadow-2xl shadow-forest/30">
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 12, scale: 0.98 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="bg-cream rounded-2xl overflow-hidden w-full max-w-2xl shadow-2xl shadow-forest/30"
+          >
             {/* Modal header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-linen">
               <div>
@@ -99,9 +111,10 @@ export default function ParkingVideoModal({
                 style={{ maxHeight: "60vh" }}
               />
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

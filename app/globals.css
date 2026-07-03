@@ -32,6 +32,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Page-wide film grain — one uniform texture over the entire page so there
+   is never a texture boundary anywhere. Also masks gradient banding on the
+   long crossfades. Sits above sections, below modals (z-200).            */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.12;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
 ::selection {
   background-color: #A8D4B6;
   color: #1B3A2C;
@@ -44,4 +59,234 @@ body {
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* ── Global microinteractions ─────────────────────────────────────────────
+   Every pill button/link gets the same tactile physics: slight lift on
+   hover, gentle press on click, visible ring for keyboard users.        */
+
+:focus-visible {
+  outline: 2px solid #3D7A55;
+  outline-offset: 3px;
+}
+
+a[class*="rounded-full"],
+button[class*="rounded-full"] {
+  transition:
+    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+a[class*="rounded-full"]:hover,
+button[class*="rounded-full"]:hover {
+  transform: translateY(-1px);
+}
+a[class*="rounded-full"]:active,
+button[class*="rounded-full"]:active {
+  transform: translateY(0) scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  a[class*="rounded-full"]:hover,
+  button[class*="rounded-full"]:hover,
+  a[class*="rounded-full"]:active,
+  button[class*="rounded-full"]:active {
+    transform: none;
+  }
+}
+
+/* ── Page-flow seam system ────────────────────────────────────────────────
+   Sections are FLAT single colours. All blending is done by .seam layers
+   placed between sections in page.tsx.
+
+   A seam is a 560px opaque crossfade panel centred across the boundary:
+   it reaches 240px up into the previous section and 320px down into the
+   next (negative margins; zero net layout height). Its gradient starts as
+   the previous section's exact colour and ends as the next section's exact
+   colour, sampled along a smoothstep curve at 11 points — so both of its
+   edges are invisible (same colour as what's beneath them) and there is no
+   height at which the blend "starts" or "stops" detectably. Because the
+   sections beneath are perfectly flat, nothing can mismatch at the edges.
+
+   A faint off-axis radial of the destination colour (≤0.15 alpha, fully
+   contained inside the panel) bows the iso-colour contours so the blend is
+   not perfectly horizontal — subtly organic, never a shape you can see.
+
+   Section content is lifted above seams with `relative z-10` on each
+   section's inner container. Light↔dark seams route their midtones with a
+   slight green cast so the blend never reads as dead grey.              */
+
+/* Gradient length is DECOUPLED from section spacing: the seam is a 600px
+   fade panel, but its negative margins swallow its full height, so it adds
+   zero layout space. It runs behind the adjacent sections' content (which
+   sits above at z-10). Spacing is controlled solely by section padding. */
+.seam {
+  position: relative;
+  z-index: 2;
+  height: 600px;
+  margin-top: -260px;
+  margin-bottom: -340px;
+  pointer-events: none;
+}
+
+/* Services (forest) → Approach (parchment) */
+.seam-forest-parchment {
+  background-image:
+    radial-gradient(ellipse 120% 55% at 30% 60%, rgba(240, 235, 224, 0.15) 0%, rgba(240, 235, 224, 0) 70%),
+    linear-gradient(
+      180deg,
+      #1B3A2C 0%,
+      #213F31 10%,
+      #314C3F 20%,
+      #496052 30%,
+      #66786B 40%,
+      #859286 50%,
+      #A5ACA0 60%,
+      #C2C4B9 70%,
+      #D9D8CD 80%,
+      #EAE6DB 90%,
+      #F0EBE0 100%
+    );
+}
+
+/* Approach (parchment) → About (cream) */
+.seam-parchment-cream {
+  background-image: linear-gradient(180deg, #F0EBE0 0%, #F5F1E8 50%, #FAF7F0 100%);
+}
+
+/* About (cream) → Booking (ink) — green-cast midtones. This seam is far
+   taller than the others: 1150px, with 720px reaching up into the John Lee
+   section, so the darkness visibly gathers from the section's upper third
+   and John Lee descends into the booking black. The curve is tuned to the
+   About layout: gentle (≤ ~25% ink) where the charcoal bio text sits,
+   accelerating hard through the lower zone where only the photo, chips and
+   buttons live, hitting ~82% ink at the boundary and full ink shortly
+   after — well before the booking heading. */
+.seam-cream-ink {
+  height: 1150px;
+  margin-top: -720px;
+  margin-bottom: -430px;
+  background-image:
+    radial-gradient(ellipse 120% 30% at 70% 66%, rgba(10, 15, 12, 0.12) 0%, rgba(10, 15, 12, 0) 70%),
+    linear-gradient(
+      180deg,
+      #FAF7F0 0%,
+      #E8E9DC 19%,
+      #C4CFC0 32%,
+      #93A594 41%,
+      #5F7563 49.5%,
+      #35503F 57.5%,
+      #223A2B 62.6%,
+      #101B13 71%,
+      #080D0A 80%,
+      #080D0A 100%
+    );
+}
+
+/* ── In-section run-outs for the dark lower page ─────────────────────────
+   For dark→dark boundaries the fade is built into the section's own
+   background: the section holds its colour, then drifts into the NEXT
+   section's exact colour across its final few hundred px (smoothstep-
+   sampled, calc'd from the bottom). The boundary pixel is therefore the
+   same colour on both sides — no overlay to align, no possible seam.    */
+
+/* Booking + Location share ONE continuous dark background (applied to a
+   wrapper around both sections in page.tsx — the sections themselves are
+   transparent, so no per-section backgrounds exist to create a seam).
+
+   Both sections hold the same green-black (#0C1711): one continuous dark
+   band. Only in the final 560px — behind the lower part of Location —
+   does the black begin opening toward green, ending at exactly #14291F
+   (the black/forest midpoint). The Referrals section picks up from that
+   precise colour and completes the fade to grove, so the black→green
+   crossing spans ~1050px across the boundary with no possible seam.
+   The dark band is deliberately clean — no blooms, no glows, and a
+   NEUTRAL near-black hold (#080D0A) rather than a green-black, so nothing
+   in the core reads green. Green only enters in the final 480px hand-off
+   toward Referrals. */
+.bg-flow-booking-location {
+  background-color: #080D0A;
+  background-image:
+    linear-gradient(
+      180deg,
+      #080D0A 0px,
+      #080D0A calc(100% - 480px),
+      #080E0B calc(100% - 432px),
+      #09100C calc(100% - 384px),
+      #0B130E calc(100% - 336px),
+      #0C1711 calc(100% - 288px),
+      #0E1B15 calc(100% - 240px),
+      #101F18 calc(100% - 192px),
+      #11231A calc(100% - 144px),
+      #13261D calc(100% - 96px),
+      #14281E calc(100% - 48px),
+      #14291F 100%
+    );
+}
+
+/* Referrals — continues the black→green fade from exactly #14291F at its
+   top edge, reaching full grove by 300px, then holding grove. The early
+   completion guarantees the bottom-fade overlay (which reaches 240px up
+   from the section's end) always lands on pure grove — its edge can never
+   sit on a still-fading colour, which is what previously drew a line. */
+.bg-referrals-flow {
+  background-color: #2C5440;
+  background-image: linear-gradient(
+    180deg,
+    #14291F 0px,
+    #162D22 33px,
+    #193226 66px,
+    #1C382B 99px,
+    #203F30 132px,
+    #244534 165px,
+    #274B39 198px,
+    #2A4F3C 231px,
+    #2B533F 264px,
+    #2C5440 300px
+  );
+}
+
+/* Footer — dark forest, continuous with the FAQ above. Its top edge is
+   the exact forest (#1B3A2C) the FAQ's run-out ends with, then it drifts
+   subtly DEEPER (never lighter) toward #10291F at the page's end for a
+   clean dark finish. No light tones anywhere. */
+.bg-footer-flow {
+  background-color: #143225;
+  background-image: linear-gradient(
+    180deg,
+    #1B3A2C 0%,
+    #183628 22%,
+    #143225 45%,
+    #122D21 72%,
+    #10291F 100%
+  );
+}
+
+/* FAQ — grove, continuous with the Referrals section above (which ends at
+   exactly #2C5440, so the boundary is same-colour and needs no overlay).
+   The final 360px ease grove → forest so the footer's fade begins from
+   that exact forest. Referrals → FAQ → Footer read as one connected
+   green passage that lifts to sage at the very end. */
+.bg-faq-flow {
+  background-color: #2C5440;
+  background-image: linear-gradient(
+    180deg,
+    #2C5440 0px,
+    #2C5440 calc(100% - 360px),
+    #2A513E calc(100% - 324px),
+    #284E3C calc(100% - 288px),
+    #264B39 calc(100% - 252px),
+    #244736 calc(100% - 216px),
+    #214333 calc(100% - 180px),
+    #1F4030 calc(100% - 144px),
+    #1D3D2E calc(100% - 108px),
+    #1C3B2D calc(100% - 54px),
+    #1B3A2C 100%
+  );
 }

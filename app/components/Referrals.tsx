@@ -1,7 +1,21 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { Stethoscope, ArrowRight, FileText, Users } from "lucide-react";
+
+const refListVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.14, delayChildren: 0.1 } },
+};
+
+const refItemVariants: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
 const referralTypes = [
   {
@@ -23,18 +37,9 @@ const referralTypes = [
 
 export default function Referrals() {
   return (
-    <section id="referrals" className="bg-grove py-24 lg:py-32 relative overflow-hidden scroll-mt-32">
-      {/* Background texture */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 50% 70% at 10% 60%, rgba(61,122,85,0.25) 0%, transparent 55%)",
-        }}
-      />
+    <section id="referrals" className="bg-referrals-flow pt-16 pb-16 lg:pt-24 lg:pb-20 overflow-hidden scroll-mt-32">
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
         <div className="grid lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-16 items-start">
           {/* Left: heading */}
           <motion.div
@@ -44,9 +49,6 @@ export default function Referrals() {
             transition={{ duration: 0.65, ease: "easeOut" }}
             className="flex flex-col gap-6"
           >
-            <span className="font-display text-[11px] font-semibold tracking-[0.22em] uppercase text-sage">
-              For healthcare providers
-            </span>
             <h2 className="font-display font-bold text-3xl lg:text-[2.8rem] text-cream leading-[1.05] tracking-[-0.025em]">
               Referrals
             </h2>
@@ -59,10 +61,13 @@ export default function Referrals() {
             <div className="flex flex-col gap-3 pt-2">
               <a
                 href="mailto:reframephysio@gmail.com"
-                className="inline-flex items-center gap-2 bg-cream text-grove text-sm font-medium px-5 py-3 rounded-full hover:bg-foam transition-colors duration-200 w-fit shadow-sm"
+                className="group inline-flex items-center gap-2 bg-cream text-grove text-sm font-medium px-5 py-3 rounded-full hover:bg-foam transition-colors duration-200 w-fit shadow-sm"
               >
                 Send a referral email
-                <ArrowRight size={15} />
+                <ArrowRight
+                  size={15}
+                  className="transition-transform duration-200 group-hover:translate-x-1"
+                />
               </a>
               <a
                 href="tel:0272414888"
@@ -73,21 +78,25 @@ export default function Referrals() {
             </div>
           </motion.div>
 
-          {/* Right: referral categories */}
+          {/* Right: referral categories — reveal in sequence */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.65, ease: "easeOut", delay: 0.12 }}
+            variants={refListVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.25 }}
             className="flex flex-col gap-4"
           >
-            <p className="text-xs font-semibold tracking-wider uppercase text-sage mb-2">
+            <motion.p
+              variants={refItemVariants}
+              className="text-xs font-semibold tracking-wider uppercase text-sage mb-2"
+            >
               We accept referrals for
-            </p>
+            </motion.p>
             {referralTypes.map(({ icon: Icon, title, description }) => (
-              <div
+              <motion.div
                 key={title}
-                className="bg-forest/40 backdrop-blur-sm rounded-2xl p-5 border border-fern/20 flex gap-4 hover:bg-forest/60 transition-colors duration-200"
+                variants={refItemVariants}
+                className="bg-forest/40 rounded-2xl p-5 border border-fern/20 flex gap-4 hover:bg-forest/60 hover:border-fern/40 hover:-translate-y-0.5 transition-all duration-200"
               >
                 <div className="w-10 h-10 rounded-xl bg-grove/60 flex items-center justify-center flex-shrink-0 border border-fern/20">
                   <Icon size={18} strokeWidth={1.6} className="text-sage" />
@@ -96,16 +105,16 @@ export default function Referrals() {
                   <p className="text-sm font-semibold text-cream mb-1">{title}</p>
                   <p className="text-xs text-mint/70 leading-relaxed">{description}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
 
-            <div className="mt-2 bg-forest/30 rounded-xl p-4 border border-fern/20">
+            <motion.div variants={refItemVariants} className="mt-2 bg-forest/30 rounded-xl p-4 border border-fern/20">
               <p className="text-xs text-mint/70 leading-relaxed">
                 <span className="font-semibold text-cream">ACC claims: </span>
                 We can assist patients with ACC claims and co-manage with their
                 GP or specialist as required.
               </p>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>

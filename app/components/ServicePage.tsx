@@ -25,7 +25,6 @@ export interface ServicePageProps {
 }
 
 export default function ServicePage({
-  serviceLabel,
   title,
   intro,
   whatItIs,
@@ -53,13 +52,6 @@ export default function ServicePage({
                 <ArrowLeft size={13} strokeWidth={2.5} />
                 Back to services
               </Link>
-
-              <div className="flex items-center gap-3 mb-5">
-                <div className="h-px w-8 bg-fern/70 flex-shrink-0" />
-                <span className="text-[11px] font-semibold tracking-[0.14em] uppercase text-fern">
-                  {serviceLabel}
-                </span>
-              </div>
 
               <h1 className="font-serif text-4xl lg:text-[3.25rem] text-forest leading-[1.08] tracking-[-0.02em] mb-6">
                 {title}
@@ -105,10 +97,7 @@ export default function ServicePage({
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, ease: "easeOut" }}
             >
-              <span className="text-[11px] font-semibold tracking-[0.14em] uppercase text-fern">
-                Get started
-              </span>
-              <h2 className="font-serif text-3xl lg:text-4xl text-forest mt-3 mb-4 leading-[1.12]">
+              <h2 className="font-serif text-3xl lg:text-4xl text-forest mb-4 leading-[1.12]">
                 Ready to take the next step?
               </h2>
               <p className="text-[15px] text-charcoal/70 leading-relaxed mb-8">
@@ -201,12 +190,6 @@ function DarkSection({ heading, body, bullets }: ContentSection) {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8 bg-fern/50" />
-            <span className="text-[11px] font-semibold tracking-[0.14em] uppercase text-sage">
-              Why Reframe
-            </span>
-          </div>
           <h2 className="font-serif text-2xl lg:text-3xl text-cream mb-6 leading-[1.15]">
             {heading}
           </h2>

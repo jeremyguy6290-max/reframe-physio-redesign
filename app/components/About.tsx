@@ -1,9 +1,21 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { GraduationCap, Award } from "lucide-react";
 import { CLINIKO_URL } from "../lib/booking";
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+const bioVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.14 } },
+};
+
+const bioItemVariants: Variants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.65, ease: EASE } },
+};
 
 const qualifications = [
   "PGDipPhty Orthopaedic Manipulative Therapy, Distinction",
@@ -22,43 +34,32 @@ const specialisms = [
 ];
 
 export default function About() {
+  const reduceMotion = useReducedMotion();
   return (
-    <section id="about" className="bg-cream py-24 lg:py-32 overflow-hidden scroll-mt-32">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        {/* Section label centred above */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.55, ease: "easeOut" }}
-          className="flex items-center gap-3 mb-12"
-        >
-          <div className="h-px flex-1 bg-linen" />
-          <span className="font-display text-[11px] font-semibold tracking-[0.22em] uppercase text-fern whitespace-nowrap">
-            Meet your physiotherapist
-          </span>
-          <div className="h-px flex-1 bg-linen" />
-        </motion.div>
-
+    <section id="about" className="bg-cream pt-16 pb-20 lg:pt-20 lg:pb-24 overflow-hidden scroll-mt-32">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Left: content */}
+          {/* Left: content — items slide in from the left, one after another */}
           <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
+            variants={reduceMotion ? undefined : bioVariants}
+            initial={reduceMotion ? false : "hidden"}
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.25 }}
             className="flex flex-col gap-7"
           >
-            <div>
+            <motion.div variants={reduceMotion ? undefined : bioItemVariants}>
               <h2 className="font-display font-bold text-4xl lg:text-[3.4rem] text-forest leading-[1.02] tracking-[-0.03em]">
                 John Lee
               </h2>
               <p className="text-base text-fern font-medium mt-3">
                 Founder &amp; Senior Physiotherapist
               </p>
-            </div>
+            </motion.div>
 
-            <div className="flex flex-col gap-3 text-[15px] text-charcoal leading-[1.75]">
+            <motion.div
+              variants={reduceMotion ? undefined : bioItemVariants}
+              className="flex flex-col gap-3 text-[15px] text-charcoal leading-[1.75]"
+            >
               <p>
                 John Lee is the founder and senior physiotherapist at Reframe
                 Physio, with over a decade of specialist experience across
@@ -69,10 +70,10 @@ export default function About() {
                 picture — then builds a treatment plan that actually fits their
                 life.
               </p>
-            </div>
+            </motion.div>
 
             {/* Qualifications */}
-            <div>
+            <motion.div variants={reduceMotion ? undefined : bioItemVariants}>
               <div className="flex items-center gap-2 mb-3.5">
                 <GraduationCap size={15} className="text-fern" />
                 <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-fern">
@@ -87,10 +88,10 @@ export default function About() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
 
             {/* Areas of specialisation */}
-            <div>
+            <motion.div variants={reduceMotion ? undefined : bioItemVariants}>
               <div className="flex items-center gap-2 mb-3.5">
                 <Award size={15} className="text-fern" />
                 <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-fern">
@@ -107,9 +108,9 @@ export default function About() {
                   </span>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
-            <div className="pt-1">
+            <motion.div variants={reduceMotion ? undefined : bioItemVariants} className="pt-1">
               <a
                 href={CLINIKO_URL}
                 target="_blank"
@@ -118,50 +119,46 @@ export default function About() {
               >
                 Book with John
               </a>
-            </div>
+            </motion.div>
           </motion.div>
 
           {/* Right: image */}
           <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
+            initial={reduceMotion ? false : { opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.5 }}
             className="relative"
           >
-            {/* Rotated background surface */}
-            <div
-              aria-hidden="true"
-              className="absolute -inset-6 rounded-[2.5rem] bg-parchment"
-              style={{ transform: "rotate(-2.5deg)" }}
-            />
-            {/* Second layer for depth */}
-            <div
-              aria-hidden="true"
-              className="absolute -inset-3 rounded-[2rem] bg-foam/60"
-              style={{ transform: "rotate(-1deg)" }}
-            />
-
-            <div className="relative rounded-[1.75rem] overflow-hidden aspect-[3/4] shadow-2xl shadow-forest/12">
+            <motion.div
+              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
+              className="group relative rounded-[1.75rem] overflow-hidden aspect-[3/4] ring-1 ring-forest/10"
+              style={{
+                boxShadow: "0 28px 80px -24px rgba(27, 58, 44, 0.45)",
+              }}
+            >
               <Image
                 src="/images/john-lee.jpg"
                 alt="John Lee – Founder and Senior Physiotherapist at Reframe Physio"
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                 style={{ objectPosition: "center 15%" }}
                 sizes="(max-width: 768px) 95vw, (max-width: 1024px) 90vw, 640px"
                 quality={95}
               />
-              {/* Bottom vignette */}
+              {/* Soft forest grounding at the base of the portrait */}
               <div
                 aria-hidden="true"
-                className="absolute bottom-0 inset-x-0 h-24"
+                className="absolute bottom-0 inset-x-0 h-36"
                 style={{
                   background:
-                    "linear-gradient(to top, rgba(27,58,44,0.15) 0%, transparent 100%)",
+                    "linear-gradient(to top, rgba(27,58,44,0.28) 0%, rgba(27,58,44,0.08) 55%, transparent 100%)",
                 }}
               />
-            </div>
+            </motion.div>
 
             {/* Floating experience card */}
             <motion.div
@@ -169,13 +166,20 @@ export default function About() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.45, duration: 0.5, ease: "easeOut" }}
-              className="absolute bottom-8 -left-6 lg:-left-10 bg-cream rounded-2xl px-5 py-4 shadow-xl shadow-forest/12 border border-linen"
+              className="absolute bottom-8 -left-6 lg:-left-10 rounded-2xl px-6 py-5 ring-1 ring-sage/25"
+              style={{
+                background: "linear-gradient(150deg, #1B3A2C 0%, #0C1711 100%)",
+                boxShadow: "0 20px 50px -16px rgba(7, 10, 8, 0.55)",
+              }}
             >
-              <p className="text-[10px] text-ash font-semibold uppercase tracking-wider mb-1">
-                Clinical experience
+              <p className="font-display font-bold text-4xl text-cream leading-none tracking-[-0.03em]">
+                10+
               </p>
-              <p className="text-2xl font-serif text-forest leading-none">10+</p>
-              <p className="text-xs text-charcoal mt-0.5">Years specialist</p>
+              <p className="text-[11.5px] font-medium text-sage mt-1.5 leading-snug">
+                Years specialist
+                <br />
+                experience
+              </p>
             </motion.div>
           </motion.div>
         </div>

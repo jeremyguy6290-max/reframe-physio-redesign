@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { MapPin, Car, Clock, Landmark } from "lucide-react";
 import { HOURS_PRIMARY, HOURS_SECONDARY } from "../lib/hours";
 import ParkingVideoModal from "./ParkingVideoModal";
@@ -31,7 +31,7 @@ const details: {
     sub: "Street parking also nearby",
     extra: (
       <ParkingVideoModal
-        buttonClassName="mt-1 inline-flex items-center gap-1.5 text-[11px] font-medium text-grove hover:text-forest transition-colors"
+        buttonClassName="mt-1 inline-flex items-center gap-1.5 text-[11px] font-medium text-sage hover:text-mint transition-colors"
       />
     ),
   },
@@ -43,10 +43,24 @@ const details: {
   },
 ];
 
+const detailsContainerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
+};
+
+const detailItemVariants: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
 export default function Location() {
   return (
-    <section id="contact" className="bg-cream py-24 lg:py-32 scroll-mt-32">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+    <section id="contact" className="pt-16 pb-16 lg:pt-24 lg:pb-20 scroll-mt-32">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left: info */}
           <motion.div
@@ -57,48 +71,52 @@ export default function Location() {
             className="flex flex-col gap-8"
           >
             <div>
-              <span className="font-display text-[11px] font-semibold tracking-[0.22em] uppercase text-fern">
-                Find us
-              </span>
-              <h2 className="font-display font-bold text-3xl lg:text-[2.8rem] text-forest mt-4 leading-[1.05] tracking-[-0.025em]">
+              <h2 className="font-display font-bold text-3xl lg:text-[2.8rem] text-cream leading-[1.05] tracking-[-0.025em]">
                 Central Wellington,
                 <br />
                 easy to reach
               </h2>
-              <p className="mt-4 text-[15px] text-charcoal/80 leading-relaxed">
+              <p className="mt-4 text-[15px] text-mint/75 leading-relaxed">
                 Anglican House, in the heart of the CBD — easy to reach by car,
                 bus, or on foot.
               </p>
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-4">
+            <motion.div
+              variants={detailsContainerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              className="grid sm:grid-cols-2 gap-4"
+            >
               {details.map(({ icon: Icon, label, value, sub, extra }) => (
-                <div
+                <motion.div
                   key={label}
-                  className="bg-parchment rounded-2xl p-5 border border-linen flex flex-col gap-2"
+                  variants={detailItemVariants}
+                  className="bg-white/[0.05] rounded-2xl p-5 border border-white/10 flex flex-col gap-2 transition-colors duration-200 hover:border-sage/40"
                 >
                   <div className="flex items-center gap-2 mb-1">
-                    <Icon size={14} className="text-fern" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-ash">
+                    <Icon size={14} className="text-sage" />
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-sage/70">
                       {label}
                     </span>
                   </div>
-                  <p className="text-sm font-medium text-forest leading-snug">
+                  <p className="text-sm font-medium text-cream leading-snug">
                     {value}
                   </p>
-                  <p className="text-xs text-charcoal">{sub}</p>
+                  <p className="text-xs text-mint/70">{sub}</p>
                   {extra}
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
 
             <a
               href="https://www.google.com/maps/search/Anglican+House,+32+Mulgrave+St,+Pipitea,+Wellington+6011"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 border border-linen text-grove text-sm font-medium px-5 py-3 rounded-full hover:bg-foam hover:border-mint transition-colors w-fit"
+              className="inline-flex items-center gap-2 border border-fern/50 text-cream text-sm font-medium px-5 py-3 rounded-full hover:bg-white/[0.06] hover:border-sage/70 transition-colors w-fit"
             >
-              <MapPin size={14} />
+              <MapPin size={14} className="text-sage" />
               Open in Google Maps
             </a>
           </motion.div>
@@ -111,7 +129,7 @@ export default function Location() {
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
             className="relative"
           >
-            <div className="rounded-3xl overflow-hidden aspect-square border border-mint/40 shadow-lg shadow-forest/8">
+            <div className="rounded-3xl overflow-hidden aspect-square border border-fern/40 shadow-xl shadow-black/25 bg-white/[0.05]">
               <iframe
                 src="https://www.google.com/maps?q=Anglican+House%2C+32+Mulgrave+St%2C+Pipitea%2C+Wellington+6011&output=embed"
                 title="Reframe Physio — Anglican House, 32 Mulgrave St, Wellington"
