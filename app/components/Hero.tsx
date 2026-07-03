@@ -15,11 +15,27 @@ export default function Hero() {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+
+    // React doesn't reliably render the `muted` attribute into SSR HTML,
+    // and mobile Safari/Chrome refuse to autoplay any video they don't
+    // see as muted — this is the classic cause of the poster + play-button
+    // state on phones. Set it imperatively before attempting playback.
+    video.defaultMuted = true;
+    video.muted = true;
+
     if (shouldReduceMotion) {
       video.pause();
-    } else {
-      video.play().catch(() => {});
+      return;
     }
+
+    const tryPlay = () => {
+      video.play().catch(() => {});
+    };
+    // Attempt immediately, and again once enough data has arrived
+    // (mobile often isn't ready to play at hydration time).
+    tryPlay();
+    video.addEventListener("canplay", tryPlay, { once: true });
+    return () => video.removeEventListener("canplay", tryPlay);
   }, [shouldReduceMotion]);
 
   return (
@@ -34,16 +50,18 @@ export default function Hero() {
       >
         <video
           ref={videoRef}
+          src="/videos/hero-reference.mp4"
           autoPlay
           muted
           loop
           playsInline
+          controls={false}
+          disablePictureInPicture
+          preload="auto"
           poster="/images/hero-physio-new.jpg"
           className="absolute inset-0 w-full h-full object-cover"
           aria-hidden="true"
-        >
-          <source src="/videos/hero-reference.mp4" type="video/mp4" />
-        </video>
+        />
       </motion.div>
 
       {/* Gradient — clears in the middle, then dissolves fully into forest
