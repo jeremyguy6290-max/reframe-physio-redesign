@@ -80,35 +80,30 @@ const RIPPLES = [
   { size: 1150, opacity: 0.026 },
 ];
 
-/* Mobile ring set: same count, same opacities, smaller base textures.
-   Each ring is a GPU layer sized by its base px (scaling is free), so
-   smaller bases cut compositor memory ~70% on phones. End scales are
-   raised so rings still expand past the viewport and vanish. */
-const RIPPLES_MOBILE = RIPPLES.map((r) => ({ ...r, size: Math.round(r.size * 0.6) }));
+/* The ripple is desktop-only: on mobile the rings are not rendered at all
+   (no GPU layers, no scroll-linked work) — the section reads clean and
+   static behind the step content. */
 
 function RippleRing({
   progress,
   size,
   opacity,
   index,
-  scaleBoost = 1,
 }: {
   progress: MotionValue<number>;
   size: number;
   opacity: number;
   index: number;
-  scaleBoost?: number;
 }) {
   // The ripple keeps opening as the user scrolls: by the end of the
   // section even the innermost ring is larger than the viewport, so no
   // arcs remain on screen — like zooming into the centre of the ripple.
   // Outer rings travel further, widening the gaps. Start state is
-  // deliberately compact. `scaleBoost` compensates smaller mobile ring
-  // textures so start/end visual sizes match the desktop behaviour.
+  // deliberately compact.
   const scale = useTransform(
     progress,
     [0, 1],
-    [(0.62 - index * 0.05) * scaleBoost, (7 + index * 1.6) * scaleBoost]
+    [0.62 - index * 0.05, 7 + index * 1.6]
   );
   const ringOpacity = useTransform(
     progress,
@@ -150,15 +145,11 @@ export default function WhyReframe() {
     target: stackRef,
     offset: ["start end", "end start"],
   });
-  const rippleProgress = useSpring(
-    scrollYProgress,
-    isMobile
-      ? { stiffness: 40, damping: 28, mass: 0.8, restDelta: 0.001 }
-      : { stiffness: 55, damping: 22, restDelta: 0.001 }
-  );
-
-  const ripples = isMobile ? RIPPLES_MOBILE : RIPPLES;
-  const scaleBoost = isMobile ? 1 / 0.6 : 1;
+  const rippleProgress = useSpring(scrollYProgress, {
+    stiffness: 55,
+    damping: 22,
+    restDelta: 0.001,
+  });
 
   return (
     <section className="relative bg-parchment pt-10 pb-16 lg:pt-12 lg:pb-20 overflow-hidden">
@@ -206,31 +197,32 @@ export default function WhyReframe() {
 
         {/* ── Centred step stack — ripple rings radiate from its centre ──── */}
         <div ref={stackRef} className="relative max-w-xl mx-auto mt-14 lg:mt-16 flex flex-col items-center text-center">
-          {/* Ripples */}
-          <div aria-hidden="true" className="absolute left-1/2 top-1/2 w-0 h-0 pointer-events-none">
-            {ripples.map((ring, i) =>
-              reduceMotion ? (
-                <div
-                  key={ring.size}
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border"
-                  style={{
-                    width: ring.size,
-                    height: ring.size,
-                    borderColor: `rgba(27, 58, 44, ${ring.opacity})`,
-                  }}
-                />
-              ) : (
-                <RippleRing
-                  key={ring.size}
-                  progress={rippleProgress}
-                  size={ring.size}
-                  opacity={ring.opacity}
-                  index={i}
-                  scaleBoost={scaleBoost}
-                />
-              )
-            )}
-          </div>
+          {/* Ripples — desktop only; not rendered at all on mobile */}
+          {!isMobile && (
+            <div aria-hidden="true" className="absolute left-1/2 top-1/2 w-0 h-0 pointer-events-none">
+              {RIPPLES.map((ring, i) =>
+                reduceMotion ? (
+                  <div
+                    key={ring.size}
+                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border"
+                    style={{
+                      width: ring.size,
+                      height: ring.size,
+                      borderColor: `rgba(27, 58, 44, ${ring.opacity})`,
+                    }}
+                  />
+                ) : (
+                  <RippleRing
+                    key={ring.size}
+                    progress={rippleProgress}
+                    size={ring.size}
+                    opacity={ring.opacity}
+                    index={i}
+                  />
+                )
+              )}
+            </div>
+          )}
           {steps.map((step, i) => (
             <div key={step.number} className="flex flex-col items-center">
 

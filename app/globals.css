@@ -47,6 +47,15 @@ body::before {
   background-size: 160px 160px;
 }
 
+/* Mobile: the fixed grain layer's blend mode forces a full-viewport
+   composite pass on every scrolled frame — a measurable jank source on
+   phones. Grain is desktop-only. */
+@media (max-width: 1023px) {
+  body::before {
+    display: none;
+  }
+}
+
 ::selection {
   background-color: #A8D4B6;
   color: #1B3A2C;

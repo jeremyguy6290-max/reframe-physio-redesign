@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { GraduationCap, Award } from "lucide-react";
 import { CLINIKO_URL } from "../lib/booking";
+import { useIsMobile } from "../lib/useIsMobile";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -35,19 +36,22 @@ const specialisms = [
 
 export default function About() {
   const reduceMotion = useReducedMotion();
+  const isMobile = useIsMobile();
+  // Mobile renders this section static: no reveals, no staggers.
+  const still = reduceMotion || isMobile;
   return (
     <section id="about" className="bg-cream pt-16 pb-20 lg:pt-20 lg:pb-24 overflow-hidden scroll-mt-32">
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left: content — items slide in from the left, one after another */}
           <motion.div
-            variants={reduceMotion ? undefined : bioVariants}
-            initial={reduceMotion ? false : "hidden"}
+            variants={still ? undefined : bioVariants}
+            initial={still ? false : "hidden"}
             whileInView="visible"
             viewport={{ once: true, amount: 0.25 }}
             className="flex flex-col gap-7"
           >
-            <motion.div variants={reduceMotion ? undefined : bioItemVariants}>
+            <motion.div variants={still ? undefined : bioItemVariants}>
               <h2 className="font-display font-bold text-4xl lg:text-[3.4rem] text-forest leading-[1.02] tracking-[-0.03em]">
                 John Lee
               </h2>
@@ -57,7 +61,7 @@ export default function About() {
             </motion.div>
 
             <motion.div
-              variants={reduceMotion ? undefined : bioItemVariants}
+              variants={still ? undefined : bioItemVariants}
               className="flex flex-col gap-3 text-[15px] text-charcoal leading-[1.75]"
             >
               <p>
@@ -73,7 +77,7 @@ export default function About() {
             </motion.div>
 
             {/* Qualifications */}
-            <motion.div variants={reduceMotion ? undefined : bioItemVariants}>
+            <motion.div variants={still ? undefined : bioItemVariants}>
               <div className="flex items-center gap-2 mb-3.5">
                 <GraduationCap size={15} className="text-fern" />
                 <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-fern">
@@ -91,7 +95,7 @@ export default function About() {
             </motion.div>
 
             {/* Areas of specialisation */}
-            <motion.div variants={reduceMotion ? undefined : bioItemVariants}>
+            <motion.div variants={still ? undefined : bioItemVariants}>
               <div className="flex items-center gap-2 mb-3.5">
                 <Award size={15} className="text-fern" />
                 <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-fern">
@@ -110,7 +114,7 @@ export default function About() {
               </div>
             </motion.div>
 
-            <motion.div variants={reduceMotion ? undefined : bioItemVariants} className="pt-1">
+            <motion.div variants={still ? undefined : bioItemVariants} className="pt-1">
               <a
                 href={CLINIKO_URL}
                 target="_blank"
@@ -124,14 +128,14 @@ export default function About() {
 
           {/* Right: image */}
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0 }}
+            initial={still ? false : { opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.5 }}
             className="relative"
           >
             <motion.div
-              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+              initial={still ? false : { opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
@@ -162,7 +166,7 @@ export default function About() {
 
             {/* Floating experience card */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={still ? false : { opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.45, duration: 0.5, ease: "easeOut" }}
