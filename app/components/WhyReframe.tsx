@@ -11,6 +11,7 @@ import {
   type Variants,
 } from "framer-motion";
 import { CLINIKO_URL } from "../lib/booking";
+import { useIsMobile } from "../lib/useIsMobile";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -79,28 +80,35 @@ const RIPPLES = [
   { size: 1150, opacity: 0.026 },
 ];
 
+/* Mobile ring set: same count, same opacities, smaller base textures.
+   Each ring is a GPU layer sized by its base px (scaling is free), so
+   smaller bases cut compositor memory ~70% on phones. End scales are
+   raised so rings still expand past the viewport and vanish. */
+const RIPPLES_MOBILE = RIPPLES.map((r) => ({ ...r, size: Math.round(r.size * 0.6) }));
+
 function RippleRing({
   progress,
   size,
   opacity,
   index,
+  scaleBoost = 1,
 }: {
   progress: MotionValue<number>;
   size: number;
   opacity: number;
   index: number;
+  scaleBoost?: number;
 }) {
   // The ripple keeps opening as the user scrolls: by the end of the
-  // section even the innermost ring (300px × ~7) is larger than the
-  // viewport, so no arcs remain on screen — like zooming into the centre
-  // of the ripple. Outer rings travel further, widening the gaps.
-  // Start state is deliberately compact: outer rings begin proportionally
-  // smaller than inner ones, so the group opens from a tight cluster into
-  // the same fully-expanded end state.
+  // section even the innermost ring is larger than the viewport, so no
+  // arcs remain on screen — like zooming into the centre of the ripple.
+  // Outer rings travel further, widening the gaps. Start state is
+  // deliberately compact. `scaleBoost` compensates smaller mobile ring
+  // textures so start/end visual sizes match the desktop behaviour.
   const scale = useTransform(
     progress,
     [0, 1],
-    [0.62 - index * 0.05, 7 + index * 1.6]
+    [(0.62 - index * 0.05) * scaleBoost, (7 + index * 1.6) * scaleBoost]
   );
   const ringOpacity = useTransform(
     progress,
@@ -115,7 +123,7 @@ function RippleRing({
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 1.4, ease: EASE, delay: 0.1 + index * 0.14 }}
       className="absolute left-1/2 top-1/2 pointer-events-none"
-      style={{ width: size, height: size, x: "-50%", y: "-50%" }}
+      style={{ width: size, height: size, x: "-50%", y: "-50%", willChange: "transform" }}
     >
       <motion.div
         className="w-full h-full rounded-full border"
@@ -123,6 +131,7 @@ function RippleRing({
           scale,
           opacity: ringOpacity,
           borderColor: "rgb(27, 58, 44)",
+          willChange: "transform, opacity",
         }}
       />
     </motion.div>
@@ -131,18 +140,25 @@ function RippleRing({
 
 export default function WhyReframe() {
   const reduceMotion = useReducedMotion();
+  const isMobile = useIsMobile();
   const stackRef = useRef<HTMLDivElement>(null);
 
-  // Ripple driver: progress of the step stack through the viewport
+  // Ripple driver: progress of the step stack through the viewport.
+  // Mobile gets softer physics (lower stiffness, higher damping) so the
+  // rings glide rather than jitter against touch-scroll momentum.
   const { scrollYProgress } = useScroll({
     target: stackRef,
     offset: ["start end", "end start"],
   });
-  const rippleProgress = useSpring(scrollYProgress, {
-    stiffness: 55,
-    damping: 22,
-    restDelta: 0.001,
-  });
+  const rippleProgress = useSpring(
+    scrollYProgress,
+    isMobile
+      ? { stiffness: 40, damping: 28, mass: 0.8, restDelta: 0.001 }
+      : { stiffness: 55, damping: 22, restDelta: 0.001 }
+  );
+
+  const ripples = isMobile ? RIPPLES_MOBILE : RIPPLES;
+  const scaleBoost = isMobile ? 1 / 0.6 : 1;
 
   return (
     <section className="relative bg-parchment pt-10 pb-16 lg:pt-12 lg:pb-20 overflow-hidden">
@@ -192,7 +208,7 @@ export default function WhyReframe() {
         <div ref={stackRef} className="relative max-w-xl mx-auto mt-14 lg:mt-16 flex flex-col items-center text-center">
           {/* Ripples */}
           <div aria-hidden="true" className="absolute left-1/2 top-1/2 w-0 h-0 pointer-events-none">
-            {RIPPLES.map((ring, i) =>
+            {ripples.map((ring, i) =>
               reduceMotion ? (
                 <div
                   key={ring.size}
@@ -210,6 +226,7 @@ export default function WhyReframe() {
                   size={ring.size}
                   opacity={ring.opacity}
                   index={i}
+                  scaleBoost={scaleBoost}
                 />
               )
             )}

@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { CLINIKO_URL } from "../lib/booking";
+import { useIsMobile } from "../lib/useIsMobile";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const HEADLINE_LINES = ["Pain, dizziness", "and concussion."];
@@ -11,6 +12,11 @@ const HEADLINE_LINES = ["Pain, dizziness", "and concussion."];
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const shouldReduceMotion = useReducedMotion();
+  const isMobile = useIsMobile();
+  // The slow Ken Burns drift continuously re-composites a full-screen
+  // video layer — fine on desktop GPUs, a scroll-jank source on phones.
+  // Mobile gets a perfectly stable, non-transformed video instead.
+  const driftEnabled = !shouldReduceMotion && !isMobile;
 
   useEffect(() => {
     const video = videoRef.current;
@@ -45,8 +51,12 @@ export default function Hero() {
           disabled automatically under reduced motion via MotionConfig) */}
       <motion.div
         className="absolute inset-0"
-        animate={shouldReduceMotion ? undefined : { scale: [1, 1.045] }}
-        transition={{ duration: 26, ease: "linear", repeat: Infinity, repeatType: "mirror" }}
+        animate={driftEnabled ? { scale: [1, 1.045] } : { scale: 1 }}
+        transition={
+          driftEnabled
+            ? { duration: 26, ease: "linear", repeat: Infinity, repeatType: "mirror" }
+            : { duration: 0.3 }
+        }
       >
         <video
           ref={videoRef}
