@@ -18,6 +18,20 @@ const bioItemVariants: Variants = {
   visible: { opacity: 1, x: 0, transition: { duration: 0.65, ease: EASE } },
 };
 
+/* Static variants for mobile / reduced motion: both states are the final
+   state, so content is fully visible no matter which label is active.
+   (Removing the variants entirely strands children at their mounted
+   "hidden" styles — the label has nothing left to resolve against.) */
+const stillParentVariants: Variants = {
+  hidden: {},
+  visible: { transition: { duration: 0 } },
+};
+
+const stillItemVariants: Variants = {
+  hidden: { opacity: 1, x: 0 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0 } },
+};
+
 const qualifications = [
   "PGDipPhty Orthopaedic Manipulative Therapy, Distinction",
   "BSc (Hons) Physiotherapy",
@@ -39,19 +53,22 @@ export default function About() {
   const isMobile = useIsMobile();
   // Mobile renders this section static: no reveals, no staggers.
   const still = reduceMotion || isMobile;
+  const colVariants = still ? stillParentVariants : bioVariants;
+  const itemVariants = still ? stillItemVariants : bioItemVariants;
   return (
     <section id="about" className="bg-cream pt-16 pb-20 lg:pt-20 lg:pb-24 overflow-hidden scroll-mt-32">
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left: content — items slide in from the left, one after another */}
           <motion.div
-            variants={still ? undefined : bioVariants}
-            initial={still ? false : "hidden"}
+            variants={colVariants}
+            initial="hidden"
             whileInView="visible"
+            animate={still ? "visible" : undefined}
             viewport={{ once: true, amount: 0.25 }}
             className="flex flex-col gap-7"
           >
-            <motion.div variants={still ? undefined : bioItemVariants}>
+            <motion.div variants={itemVariants}>
               <h2 className="font-display font-bold text-4xl lg:text-[3.4rem] text-forest leading-[1.02] tracking-[-0.03em]">
                 John Lee
               </h2>
@@ -61,7 +78,7 @@ export default function About() {
             </motion.div>
 
             <motion.div
-              variants={still ? undefined : bioItemVariants}
+              variants={itemVariants}
               className="flex flex-col gap-3 text-[15px] text-charcoal leading-[1.75]"
             >
               <p>
@@ -77,7 +94,7 @@ export default function About() {
             </motion.div>
 
             {/* Qualifications */}
-            <motion.div variants={still ? undefined : bioItemVariants}>
+            <motion.div variants={itemVariants}>
               <div className="flex items-center gap-2 mb-3.5">
                 <GraduationCap size={15} className="text-fern" />
                 <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-fern">
@@ -95,7 +112,7 @@ export default function About() {
             </motion.div>
 
             {/* Areas of specialisation */}
-            <motion.div variants={still ? undefined : bioItemVariants}>
+            <motion.div variants={itemVariants}>
               <div className="flex items-center gap-2 mb-3.5">
                 <Award size={15} className="text-fern" />
                 <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-fern">
@@ -114,7 +131,7 @@ export default function About() {
               </div>
             </motion.div>
 
-            <motion.div variants={still ? undefined : bioItemVariants} className="pt-1">
+            <motion.div variants={itemVariants} className="pt-1">
               <a
                 href={CLINIKO_URL}
                 target="_blank"
