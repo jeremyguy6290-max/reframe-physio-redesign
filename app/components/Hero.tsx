@@ -26,6 +26,18 @@ export default function Hero() {
     video.defaultMuted = true;
     video.muted = true;
 
+    // Guard for browsers that ignore `media` on <source>: if a mobile
+    // viewport ended up on the desktop file, force the mobile encode
+    // (H.264 Main, no audio, 720p — the reliably-autoplayable variant).
+    if (
+      isMobile &&
+      video.currentSrc &&
+      !video.currentSrc.includes("hero-reference-mobile")
+    ) {
+      video.src = "/videos/hero-reference-mobile.mp4";
+      video.load();
+    }
+
     if (shouldReduceMotion) {
       video.pause();
       return;
@@ -45,7 +57,7 @@ export default function Hero() {
       events.forEach((e) => video.removeEventListener(e, tryPlay));
       window.removeEventListener("touchstart", tryPlay);
     };
-  }, [shouldReduceMotion]);
+  }, [shouldReduceMotion, isMobile]);
 
   return (
     <section className="relative overflow-hidden bg-forest" style={{ minHeight: "100svh" }}>
@@ -70,7 +82,7 @@ export default function Hero() {
           ref={videoWrapRef}
           className="absolute inset-0"
           dangerouslySetInnerHTML={{
-            __html: `<video src="/videos/hero-reference.mp4" autoplay muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture poster="/images/hero-physio-new.jpg" class="absolute inset-0 w-full h-full object-cover" aria-hidden="true"></video>`,
+            __html: `<video autoplay muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture poster="/images/hero-physio-new.jpg" class="absolute inset-0 w-full h-full object-cover" aria-hidden="true"><source src="/videos/hero-reference-mobile.mp4" type="video/mp4" media="(max-width: 1023px)" /><source src="/videos/hero-reference.mp4" type="video/mp4" /></video>`,
           }}
         />
       </motion.div>
