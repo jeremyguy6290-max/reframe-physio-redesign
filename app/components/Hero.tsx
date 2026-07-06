@@ -10,7 +10,7 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const HEADLINE_LINES = ["Pain, dizziness", "and concussion."];
 
 export default function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoWrapRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
   // The slow Ken Burns drift continuously re-composites a full-screen
@@ -19,13 +19,10 @@ export default function Hero() {
   const driftEnabled = !shouldReduceMotion && !isMobile;
 
   useEffect(() => {
-    const video = videoRef.current;
+    const video = videoWrapRef.current?.querySelector("video");
     if (!video) return;
 
-    // React doesn't reliably render the `muted` attribute into SSR HTML,
-    // and mobile Safari/Chrome refuse to autoplay any video they don't
-    // see as muted — this is the classic cause of the poster + play-button
-    // state on phones. Set it imperatively before attempting playback.
+    // Belt and braces on top of the parse-time attributes below.
     video.defaultMuted = true;
     video.muted = true;
 
@@ -37,11 +34,17 @@ export default function Hero() {
     const tryPlay = () => {
       video.play().catch(() => {});
     };
-    // Attempt immediately, and again once enough data has arrived
-    // (mobile often isn't ready to play at hydration time).
+    // Attempt immediately, retry as data arrives, and once more on the
+    // first touch (covers devices that gate autoplay until interaction,
+    // e.g. iOS Low Power Mode — a scroll counts as the touch).
     tryPlay();
-    video.addEventListener("canplay", tryPlay, { once: true });
-    return () => video.removeEventListener("canplay", tryPlay);
+    const events = ["loadedmetadata", "loadeddata", "canplay"] as const;
+    events.forEach((e) => video.addEventListener(e, tryPlay, { once: true }));
+    window.addEventListener("touchstart", tryPlay, { once: true, passive: true });
+    return () => {
+      events.forEach((e) => video.removeEventListener(e, tryPlay));
+      window.removeEventListener("touchstart", tryPlay);
+    };
   }, [shouldReduceMotion]);
 
   return (
@@ -58,19 +61,17 @@ export default function Hero() {
             : { duration: 0.3 }
         }
       >
-        <video
-          ref={videoRef}
-          src="/videos/hero-reference.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          controls={false}
-          disablePictureInPicture
-          preload="auto"
-          poster="/images/hero-physio-new.jpg"
-          className="absolute inset-0 w-full h-full object-cover"
-          aria-hidden="true"
+        {/* Rendered as a raw HTML string so the `muted` attribute is
+            present in the server-rendered markup at parse time — React
+            sets muted only as a JS property, which mobile browsers ignore
+            when deciding autoplay eligibility. This is the reliable fix
+            for the poster + play-button state on phones. */}
+        <div
+          ref={videoWrapRef}
+          className="absolute inset-0"
+          dangerouslySetInnerHTML={{
+            __html: `<video src="/videos/hero-reference.mp4" autoplay muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture poster="/images/hero-physio-new.jpg" class="absolute inset-0 w-full h-full object-cover" aria-hidden="true"></video>`,
+          }}
         />
       </motion.div>
 
