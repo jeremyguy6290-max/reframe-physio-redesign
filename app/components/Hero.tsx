@@ -19,45 +19,47 @@ export default function Hero() {
   const driftEnabled = !shouldReduceMotion && !isMobile;
 
   useEffect(() => {
-    const video = videoWrapRef.current?.querySelector("video");
-    if (!video) return;
+    const videos = videoWrapRef.current?.querySelectorAll("video");
+    if (!videos || videos.length === 0) return;
 
-    // Belt and braces on top of the parse-time attributes below.
-    video.defaultMuted = true;
-    video.muted = true;
-
-    // Guard for browsers that ignore `media` on <source>: if a mobile
-    // viewport ended up on the desktop file, force the mobile encode
-    // (H.264 Main, no audio, 720p — the reliably-autoplayable variant).
-    if (
-      isMobile &&
-      video.currentSrc &&
-      !video.currentSrc.includes("hero-reference-mobile")
-    ) {
-      video.src = "/videos/hero-reference-mobile.mp4";
-      video.load();
-    }
-
-    if (shouldReduceMotion) {
-      video.pause();
-      return;
-    }
-
-    const tryPlay = () => {
-      video.play().catch(() => {});
-    };
-    // Attempt immediately, retry as data arrives, and once more on the
-    // first touch (covers devices that gate autoplay until interaction,
-    // e.g. iOS Low Power Mode — a scroll counts as the touch).
-    tryPlay();
     const events = ["loadedmetadata", "loadeddata", "canplay"] as const;
-    events.forEach((e) => video.addEventListener(e, tryPlay, { once: true }));
-    window.addEventListener("touchstart", tryPlay, { once: true, passive: true });
-    return () => {
-      events.forEach((e) => video.removeEventListener(e, tryPlay));
-      window.removeEventListener("touchstart", tryPlay);
+    const cleanups: Array<() => void> = [];
+
+    videos.forEach((video) => {
+      // Belt and braces on top of the parse-time attributes in the markup.
+      video.defaultMuted = true;
+      video.muted = true;
+
+      if (shouldReduceMotion) {
+        video.pause();
+        return;
+      }
+
+      const tryPlay = () => {
+        video.play().catch(() => {});
+      };
+      // Attempt immediately, retry as data arrives, and once more on the
+      // first touch (covers devices that gate autoplay until interaction,
+      // e.g. iOS Low Power Mode — a scroll counts as the touch).
+      tryPlay();
+      events.forEach((e) => video.addEventListener(e, tryPlay, { once: true }));
+      cleanups.push(() =>
+        events.forEach((e) => video.removeEventListener(e, tryPlay))
+      );
+    });
+
+    if (shouldReduceMotion) return;
+
+    const touchPlay = () => {
+      videoWrapRef.current
+        ?.querySelectorAll("video")
+        .forEach((v) => v.play().catch(() => {}));
     };
-  }, [shouldReduceMotion, isMobile]);
+    window.addEventListener("touchstart", touchPlay, { once: true, passive: true });
+    cleanups.push(() => window.removeEventListener("touchstart", touchPlay));
+
+    return () => cleanups.forEach((fn) => fn());
+  }, [shouldReduceMotion]);
 
   return (
     <section className="relative overflow-hidden bg-forest" style={{ minHeight: "100svh" }}>
@@ -73,18 +75,30 @@ export default function Hero() {
             : { duration: 0.3 }
         }
       >
-        {/* Rendered as a raw HTML string so the `muted` attribute is
-            present in the server-rendered markup at parse time — React
-            sets muted only as a JS property, which mobile browsers ignore
-            when deciding autoplay eligibility. This is the reliable fix
-            for the poster + play-button state on phones. */}
-        <div
-          ref={videoWrapRef}
-          className="absolute inset-0"
-          dangerouslySetInnerHTML={{
-            __html: `<video autoplay muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture poster="/images/hero-physio-new.jpg" class="absolute inset-0 w-full h-full object-cover" aria-hidden="true"><source src="/videos/hero-reference-mobile.mp4" type="video/mp4" media="(max-width: 1023px)" /><source src="/videos/hero-reference.mp4" type="video/mp4" /></video>`,
-          }}
-        />
+        {/* Two dedicated <video> elements, chosen by CSS visibility (both
+            present from first render — no JS flip/remount, which was the
+            cause of the flickering image→video state on mobile). Rendered
+            as raw HTML so autoplay/muted/playsinline are real parse-time
+            attributes: React only sets `muted` as a JS property, which
+            mobile browsers ignore when deciding autoplay eligibility.
+            The mobile element deliberately has NO poster, so phones never
+            show an image state — just the video from the first frame. */}
+        <div ref={videoWrapRef} className="absolute inset-0">
+          {/* Mobile — visible below lg, no poster, lightweight encode first */}
+          <div
+            className="absolute inset-0 lg:hidden"
+            dangerouslySetInnerHTML={{
+              __html: `<video autoplay muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture class="absolute inset-0 w-full h-full object-cover" aria-hidden="true"><source src="/videos/hero-reference-mobile.mp4" type="video/mp4" /><source src="/videos/hero-reference.mp4" type="video/mp4" /></video>`,
+            }}
+          />
+          {/* Desktop — visible at lg+, keeps poster fallback (unchanged) */}
+          <div
+            className="absolute inset-0 hidden lg:block"
+            dangerouslySetInnerHTML={{
+              __html: `<video autoplay muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture poster="/images/hero-physio-new.jpg" class="absolute inset-0 w-full h-full object-cover" aria-hidden="true"><source src="/videos/hero-reference.mp4" type="video/mp4" /></video>`,
+            }}
+          />
+        </div>
       </motion.div>
 
       {/* Gradient — clears in the middle, then dissolves fully into forest
